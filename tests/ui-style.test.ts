@@ -45,6 +45,15 @@ describe("UI color contrast hooks", () => {
         expect(renderTs).toContain("cell.dataset.label = label");
     });
 
+    test("inputとoutputは常時1カラムで縦方向に並べる", () => {
+        expect(css).toMatch(
+            /\.app-shell\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s,
+        );
+        expect(css).not.toContain(
+            "grid-template-columns: minmax(280px, 420px) minmax(0, 1fr)",
+        );
+    });
+
     test("output内の数値セルは右揃えで、結果表の文字サイズを統一する", () => {
         expect(css).toContain("--result-table-font-size");
         expect(css).toContain("font-size: var(--result-table-font-size)");
