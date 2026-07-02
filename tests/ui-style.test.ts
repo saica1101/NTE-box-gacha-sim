@@ -31,15 +31,17 @@ describe("UI color contrast hooks", () => {
         expect(css).toContain("border-radius: 999px");
     });
 
-    test("選択中モードとテーブルヘッダーに専用の色トークンを使う", () => {
+    test("選択中モードに専用の色トークンを使い、結果テーブルのヘッダーは控えめにする", () => {
         expect(css).toContain("--mode-selected-bg");
         expect(css).toContain("--mode-selected-ink");
-        expect(css).toContain("--table-head-bg");
-        expect(css).toContain("--table-head-ink");
         expect(css).toContain("background: var(--mode-selected-bg)");
         expect(css).toContain("color: var(--mode-selected-ink)");
-        expect(css).toContain("background: var(--table-head-bg)");
-        expect(css).toContain("color: var(--table-head-ink)");
+        expect(css).toMatch(
+            /\.result-table thead th\s*{[^}]*background:\s*transparent/s,
+        );
+        expect(css).toMatch(
+            /\.result-table thead th\s*{[^}]*color:\s*var\(--ink-soft\)/s,
+        );
     });
 
     test("上位5件テーブルのヘッダーを短くして1行表示にする", () => {
@@ -59,7 +61,7 @@ describe("UI color contrast hooks", () => {
 
     test("6列化した上位5件テーブルの密度を読みやすく整える", () => {
         expect(css).toContain("--result-table-font-size: 0.9rem");
-        expect(css).toContain("padding: 10px 10px");
+        expect(css).toContain("padding: 14px 18px");
         expect(css).toMatch(
             /\.top-candidates-table th:nth-child\(6\),\s*\.top-candidates-table td:nth-child\(6\)\s*{\s*width:\s*30%/s,
         );
@@ -92,20 +94,38 @@ describe("UI color contrast hooks", () => {
         expect(renderTs).not.toContain('label: "ファンス消費率"');
         expect(renderTs).not.toContain('label: "円石消費率"');
         expect(renderTs).toContain("試算が完了しました。");
+        expect(renderTs).not.toContain(
+            "`指定${result.requestedPulls}回を購入できます。`",
+        );
+        expect(renderTs).not.toContain(
+            "現在の所持量では最大${result.actualPulls}回まで購入できます。",
+        );
         expect(renderTs).not.toContain("試算完了：${totalElapsedMs");
     });
 
     test("output要約はアラートと3カードのダッシュボードUIにする", () => {
+        const accentRule = /\.outcome-summary-item::before\s*{[^}]*}/s.exec(
+            css,
+        )?.[0];
+
         expect(css).toContain(".status-alert");
         expect(css).toContain("border-left: 4px solid var(--signal)");
         expect(css).toContain(".outcome-summary-item.is-primary");
-        expect(css).toContain("border-top: 4px solid var(--signal)");
+        expect(css).toContain(".outcome-summary-item::before");
+        expect(css).toMatch(
+            /\.outcome-summary-item\s*{[^}]*overflow:\s*hidden/s,
+        );
+        expect(accentRule).toContain("left: -1px");
+        expect(accentRule).toContain("top: -1px");
+        expect(accentRule).toContain("bottom: -1px");
+        expect(accentRule).toContain("border-radius: 0");
+        expect(accentRule).toContain("background: var(--signal)");
+        expect(css).not.toContain("border-top: 4px solid var(--signal)");
         expect(css).toContain(".result-highlight");
         expect(css).toContain(".result-number");
         expect(css).toContain(".metric-rows");
         expect(css).toContain(".metric-row");
         expect(css).toContain(".metric-value");
-        expect(css).not.toContain(".outcome-summary-item::before");
         expect(css).not.toContain("border-left: 4px solid var(--steel)");
         expect(renderTs).not.toContain("📊");
         expect(renderTs).not.toContain("📉");
@@ -116,6 +136,16 @@ describe("UI color contrast hooks", () => {
         expect(css).toMatch(
             /\.top-candidates-table th:nth-child\(6\)\s*{[^}]*text-align:\s*center/s,
         );
+    });
+
+    test("支払い回の内訳はタグUIで表示する", () => {
+        expect(css).toContain(".round-pairs");
+        expect(css).toContain(".round-pair-row");
+        expect(css).toContain(".round-tag-list");
+        expect(css).toContain(".round-tag");
+        expect(renderTs).toContain("renderRoundTags");
+        expect(renderTs).toContain("round-tag is-gems");
+        expect(renderTs).toContain("round-tag is-fans");
     });
 
     test("output要約は判定、消費、残高の3カラムにする", () => {
@@ -144,7 +174,9 @@ describe("UI color contrast hooks", () => {
     });
 
     test("output内の表はカード幅に収まり、狭い幅では行内ラベルを表示する", () => {
-        expect(html).toContain('class="table-wrap result-table-wrap"');
+        expect(html).toContain(
+            'class="table-wrap result-table-wrap table-card"',
+        );
         expect(html).toContain(
             '<table class="result-table top-candidates-table">',
         );
@@ -153,6 +185,11 @@ describe("UI color contrast hooks", () => {
         );
         expect(css).toContain(".result-panel .table-wrap");
         expect(css).toContain("overflow-x: visible");
+        expect(css).toContain(".table-card");
+        expect(css).toContain(".rank-number");
+        expect(css).toContain(".rank-1");
+        expect(css).toContain(".num-val");
+        expect(css).toContain(".table-text-muted");
         expect(css).toContain(".result-table");
         expect(css).toContain("min-width: 0");
         expect(css).toContain("table-layout: fixed");
@@ -160,6 +197,11 @@ describe("UI color contrast hooks", () => {
         expect(css).toContain("@container");
         expect(css).toContain("content: attr(data-label)");
         expect(renderTs).toContain("cell.dataset.label = label");
+        expect(renderTs).toContain("rank-number");
+        expect(renderTs).toContain("rank-1");
+        expect(renderTs).toContain("num-val");
+        expect(renderTs).toContain("table-text-muted");
+        expect(html).toContain('<h3 id="detail-heading">1位の各回支払い</h3>');
     });
 
     test("inputとoutputは常時1カラムで縦方向に並べる", () => {

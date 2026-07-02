@@ -26,7 +26,8 @@ interface OutcomeMetricRow {
 interface ResultCell {
     label: string;
     value: string;
-    variant?: "number";
+    variant?: "number" | "rank" | "muted";
+    isZero?: boolean;
 }
 
 type StatusTone = "idle" | "stale" | "loading" | "success" | "error";
@@ -96,7 +97,7 @@ export function renderResult(
         return;
     }
 
-    renderFallbackMessage(elements, result);
+    renderFallbackMessage(elements);
     renderMetrics(elements, result);
     renderRoundBreakdown(elements, result);
     renderTopCandidates(elements, result);
@@ -107,30 +108,16 @@ export function renderResult(
 function renderUnavailable(elements: AppElements): void {
     setText(elements.fallbackMessage, "現在の所持通貨では1回も引けません。");
     elements.resultMetrics.replaceChildren();
-    setText(elements.gemRounds, "なし");
-    setText(elements.fanRounds, "なし");
+    renderRoundTags(elements.gemRounds, "なし", "gems");
+    renderRoundTags(elements.fanRounds, "なし", "fans");
     elements.topCandidatesBody.replaceChildren();
     setText(elements.topCandidatesEmpty, "表示できる候補はありません。");
     elements.paymentDetailBody.replaceChildren();
     setText(elements.paymentDetailEmpty, "支払い詳細はありません。");
 }
 
-function renderFallbackMessage(
-    elements: AppElements,
-    result: OptimizationResult,
-): void {
-    if (result.status === "fallback") {
-        setText(
-            elements.fallbackMessage,
-            `指定${result.requestedPulls}回は購入できません。現在の所持量では最大${result.actualPulls}回まで購入できます。`,
-        );
-        return;
-    }
-
-    setText(
-        elements.fallbackMessage,
-        `指定${result.requestedPulls}回を購入できます。`,
-    );
+function renderFallbackMessage(elements: AppElements): void {
+    setText(elements.fallbackMessage, "");
 }
 
 function renderMetrics(
@@ -194,13 +181,15 @@ function renderRoundBreakdown(
     elements: AppElements,
     result: OptimizationResult,
 ): void {
-    setText(
+    renderRoundTags(
         elements.gemRounds,
         formatRounds(result.best, "gems", result.actualPulls),
+        "gems",
     );
-    setText(
+    renderRoundTags(
         elements.fanRounds,
         formatRounds(result.best, "fans", result.actualPulls),
+        "fans",
     );
 }
 
@@ -210,31 +199,39 @@ function renderTopCandidates(
 ): void {
     const rows = result.recommendations.map((candidate, index) => {
         const row = document.createElement("tr");
+        if (index === 0) {
+            row.classList.add("rank-1");
+        }
         const cells: ResultCell[] = [
-            { label: "順位", value: `${index + 1}`, variant: "number" },
+            { label: "順位", value: `${index + 1}`, variant: "rank" },
             {
                 label: "消費ファンス",
                 value: formatNumber(candidate.fanSpend),
                 variant: "number",
+                isZero: candidate.fanSpend === 0,
             },
             {
                 label: "消費円石",
                 value: formatNumber(candidate.gemSpend),
                 variant: "number",
+                isZero: candidate.gemSpend === 0,
             },
             {
                 label: "残ファンス",
                 value: formatNumber(candidate.fanRemain),
                 variant: "number",
+                isZero: candidate.fanRemain === 0,
             },
             {
                 label: "残円石",
                 value: formatNumber(candidate.gemRemain),
                 variant: "number",
+                isZero: candidate.gemRemain === 0,
             },
             {
                 label: "円石払い回",
                 value: formatRounds(candidate, "gems", result.actualPulls),
+                variant: "muted",
             },
         ];
 
@@ -248,6 +245,28 @@ function renderTopCandidates(
         elements.topCandidatesEmpty,
         rows.length === 0 ? "表示できる候補はありません。" : "",
     );
+}
+
+function renderRoundTags(
+    container: HTMLElement,
+    value: string,
+    kind: "gems" | "fans",
+): void {
+    const tagClassName =
+        kind === "gems" ? "round-tag is-gems" : "round-tag is-fans";
+    const segments = value === "なし" ? [value] : value.split("、");
+    const tags = segments.map((segment) => {
+        const tag = document.createElement("span");
+
+        tag.className =
+            segment === "なし" ? `${tagClassName} is-empty` : tagClassName;
+        tag.textContent = segment;
+
+        return tag;
+    });
+
+    container.className = "round-tag-list";
+    container.replaceChildren(...tags);
 }
 
 function renderPaymentDetails(
@@ -389,13 +408,33 @@ function appendLabeledCells(
     row: HTMLTableRowElement,
     cells: ResultCell[],
 ): void {
-    cells.forEach(({ label, value, variant }) => {
+    cells.forEach(({ label, value, variant, isZero }) => {
         const cell = document.createElement("td");
         cell.dataset.label = label;
+
         if (variant === "number") {
+            const number = document.createElement("span");
+
             cell.classList.add("number-cell");
+            number.className = isZero ? "num-val zero-val" : "num-val";
+            number.textContent = value;
+            cell.append(number);
+        } else if (variant === "rank") {
+            const rank = document.createElement("span");
+
+            rank.className = "rank-number";
+            rank.textContent = value;
+            cell.append(rank);
+        } else if (variant === "muted") {
+            const muted = document.createElement("span");
+
+            muted.className = "table-text-muted";
+            muted.textContent = value;
+            cell.append(muted);
+        } else {
+            cell.textContent = value;
         }
-        cell.textContent = value;
+
         row.append(cell);
     });
 }

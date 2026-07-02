@@ -263,20 +263,28 @@
                     <section aria-labelledby="rounds-heading">
                         <h3 id="rounds-heading">支払い回の内訳</h3>
                         <div class="round-pairs">
-                            <p>
-                                <strong>円石払い</strong>
-                                <span id="gem-rounds">なし</span>
+                            <p class="round-pair-row">
+                                <strong class="round-pair-label is-gems"
+                                    >円石払い</strong
+                                >
+                                <span id="gem-rounds" class="round-tag-list"
+                                    >なし</span
+                                >
                             </p>
-                            <p>
-                                <strong>ファンス払い</strong>
-                                <span id="fan-rounds">なし</span>
+                            <p class="round-pair-row">
+                                <strong class="round-pair-label is-fans"
+                                    >ファンス払い</strong
+                                >
+                                <span id="fan-rounds" class="round-tag-list"
+                                    >なし</span
+                                >
                             </p>
                         </div>
                     </section>
 
                     <section aria-labelledby="top-heading">
                         <h3 id="top-heading">最も得な結果 上位5件</h3>
-                        <div class="table-wrap result-table-wrap">
+                        <div class="table-wrap result-table-wrap table-card">
                             <table class="result-table top-candidates-table">
                                 <caption>
                                     選択した最適化モードで順位付けした候補
@@ -298,8 +306,8 @@
                     </section>
 
                     <section aria-labelledby="detail-heading">
-                        <h3 id="detail-heading">1位候補の各回支払い</h3>
-                        <div class="table-wrap result-table-wrap">
+                        <h3 id="detail-heading">1位の各回支払い</h3>
+                        <div class="table-wrap result-table-wrap table-card">
                             <table class="result-table payment-detail-table">
                                 <caption>
                                     各回の支払い方法と必要コスト
