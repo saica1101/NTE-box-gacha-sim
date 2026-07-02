@@ -634,10 +634,6 @@ thead th {
     width: 30%;
 }
 
-.top-candidates-table th:nth-child(6) {
-    text-align: center;
-}
-
 .status-alert {
     display: grid;
     gap: 4px;
@@ -996,6 +992,10 @@ thead th {
         gap: 12px;
         padding: 7px 0;
         border-bottom: 0;
+    }
+
+    .top-candidates-table td:nth-child(n) {
+        width: 100%;
     }
 
     .result-table td::before {

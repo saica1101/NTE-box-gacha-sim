@@ -215,6 +215,14 @@ describe("UI color contrast hooks", () => {
         expect(html).toContain('<h3 id="detail-heading">1位の各回支払い</h3>');
     });
 
+    test("400px幅のカード表示では上位5件テーブルのPC用列幅を解除する", () => {
+        const containerCss = css.slice(css.indexOf("@container"));
+
+        expect(containerCss).toMatch(
+            /\.top-candidates-table td:nth-child\(n\)\s*{[^}]*width:\s*100%/s,
+        );
+    });
+
     test("inputとoutputは常時1カラムで縦方向に並べる", () => {
         expect(css).toMatch(
             /\.app-shell\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s,
