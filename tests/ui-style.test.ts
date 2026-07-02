@@ -215,12 +215,32 @@ describe("UI color contrast hooks", () => {
         expect(html).toContain('<h3 id="detail-heading">1位の各回支払い</h3>');
     });
 
-    test("400px幅のカード表示では上位5件テーブルのPC用列幅を解除する", () => {
+    test("400px幅のカード表示では結果テーブルをモバイルカードとして整える", () => {
         const containerCss = css.slice(css.indexOf("@container"));
 
         expect(containerCss).toMatch(
             /\.top-candidates-table td:nth-child\(n\)\s*{[^}]*width:\s*100%/s,
         );
+        expect(containerCss).toMatch(
+            /\.result-table caption\s*{[^}]*display:\s*block[^}]*width:\s*100%[^}]*white-space:\s*normal/s,
+        );
+        expect(containerCss).toMatch(
+            /\.top-candidates-table tr\s*{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s,
+        );
+        expect(containerCss).toMatch(
+            /\.top-candidates-table td:nth-child\(1\)\s*{[^}]*grid-column:\s*1\s*\/\s*-1/s,
+        );
+        expect(containerCss).toMatch(
+            /\.payment-detail-table tr\s*{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s,
+        );
+        expect(containerCss).toContain(".top-candidates-table td:nth-child(6)");
+        expect(containerCss).toMatch(
+            /\.top-candidates-table td:nth-child\(6\)\s*{[^}]*grid-column:\s*1\s*\/\s*-1[^}]*display:\s*grid/s,
+        );
+        expect(containerCss).toMatch(
+            /\.top-candidates-table td:nth-child\(6\)::before\s*{[^}]*white-space:\s*nowrap/s,
+        );
+        expect(containerCss).toContain(".payment-detail-table td:nth-child(2)");
     });
 
     test("inputとoutputは常時1カラムで縦方向に並べる", () => {

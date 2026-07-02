@@ -634,6 +634,10 @@ thead th {
     width: 30%;
 }
 
+.top-candidates-table th:nth-child(6) {
+    text-align: center;
+}
+
 .status-alert {
     display: grid;
     gap: 4px;
@@ -966,7 +970,17 @@ thead th {
     .result-table {
         border-collapse: separate;
         border-spacing: 0;
+        display: block;
         font-size: var(--result-table-font-size);
+    }
+
+    .result-table caption {
+        display: block;
+        width: 100%;
+        padding: 12px 14px 0;
+        white-space: normal;
+        overflow-wrap: normal;
+        line-height: 1.7;
     }
 
     .result-table thead {
@@ -981,28 +995,99 @@ thead th {
         width: 100%;
     }
 
+    .result-table tbody {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+    }
+
     .result-table tr {
-        padding: 10px 0;
-        border-bottom: 1px solid var(--line-soft);
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        min-width: 0;
+        padding: 12px;
+        border: 1px solid rgb(47 93 100 / 18%);
+        border-radius: 8px;
+        background: rgb(47 93 100 / 5%);
     }
 
     .result-table td {
         display: grid;
-        grid-template-columns: minmax(7.5rem, 42%) minmax(0, 1fr);
-        gap: 12px;
-        padding: 7px 0;
+        grid-template-columns: 1fr;
+        gap: 5px;
+        min-width: 0;
+        padding: 0;
         border-bottom: 0;
+        text-align: left;
     }
 
     .top-candidates-table td:nth-child(n) {
         width: 100%;
     }
 
+    .top-candidates-table tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .top-candidates-table td:nth-child(1) {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgb(47 93 100 / 16%);
+        text-align: left;
+    }
+
+    .top-candidates-table td:nth-child(6) {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding-top: 8px;
+        border-top: 1px solid rgb(47 93 100 / 16%);
+    }
+
+    .top-candidates-table td:nth-child(6)::before {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .payment-detail-table tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .payment-detail-table td:nth-child(2) {
+        text-align: left;
+    }
+
     .result-table td::before {
         color: var(--ink-soft);
-        font-weight: 800;
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.04em;
         text-align: left;
         content: attr(data-label);
+    }
+
+    .result-table .number-cell,
+    .payment-detail-table th:nth-child(3),
+    .payment-detail-table th:nth-child(4) {
+        text-align: left;
+    }
+
+    .result-table .num-val,
+    .result-table .table-text-muted {
+        justify-self: end;
+        max-width: 100%;
+        text-align: right;
+    }
+
+    .result-table .rank-number {
+        justify-self: start;
     }
 }
 
