@@ -358,6 +358,7 @@ td {
 thead th {
     color: var(--table-head-ink);
     background: var(--table-head-bg);
+    white-space: nowrap;
 }
 
 .status-message {
