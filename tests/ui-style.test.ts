@@ -67,18 +67,25 @@ describe("UI color contrast hooks", () => {
     });
 
     test("outputの要約は購入可否と消費量と残量だけを見せる", () => {
+        expect(html).toContain('class="status-alert"');
+        expect(html).toContain('class="status-detail"');
         expect(html).toContain(
             '<dl id="result-metrics" class="outcome-summary"></dl>',
         );
         expect(css).toContain(".outcome-summary");
         expect(css).toContain(".outcome-summary-item");
         expect(css).toContain(".outcome-summary-item.is-primary");
-        expect(renderTs).toContain('label: "判定"');
+        expect(renderTs).toContain('label: "判定結果"');
+        expect(renderTs).toContain('label: "消費コスト"');
+        expect(renderTs).toContain('label: "残高情報"');
         expect(renderTs).toContain('label: "ファンス消費"');
         expect(renderTs).toContain('label: "円石消費"');
-        expect(renderTs).toContain('label: "消費後残量"');
         expect(renderTs).toContain('label: "残ファンス"');
         expect(renderTs).toContain('label: "残円石"');
+        expect(renderTs).toContain('variant: "cost"');
+        expect(renderTs).toContain('variant: "balance"');
+        expect(renderTs).toContain("result-number");
+        expect(renderTs).not.toContain('label: "消費後残量"');
         expect(renderTs).not.toContain('label: "指定回数"');
         expect(renderTs).not.toContain('label: "実際に計算した回数"');
         expect(renderTs).not.toContain('label: "計算候補数"');
@@ -88,21 +95,21 @@ describe("UI color contrast hooks", () => {
         expect(renderTs).not.toContain("試算完了：${totalElapsedMs");
     });
 
-    test("判定は文字装飾で軽く強調し、要約カードの左線は直線で描く", () => {
-        expect(css).toContain(".outcome-summary-item::before");
-        expect(css).toContain(".outcome-summary-item.is-primary::before");
-        expect(css).toContain("border-radius: 0");
-        expect(css).toContain("left: 8px");
-        expect(css).toContain("top: 10px");
-        expect(css).toContain("bottom: 10px");
-        expect(css).toMatch(
-            /\.outcome-summary-item::before\s*{[^}]*background:\s*var\(--signal\)/s,
-        );
-        expect(css).toContain("text-decoration-thickness: 2px");
-        expect(css).not.toContain("grid-row: span 2");
-        expect(css).not.toContain("font-size: 1.3rem");
-        expect(css).not.toContain("background: var(--ink)");
+    test("output要約はアラートと3カードのダッシュボードUIにする", () => {
+        expect(css).toContain(".status-alert");
+        expect(css).toContain("border-left: 4px solid var(--signal)");
+        expect(css).toContain(".outcome-summary-item.is-primary");
+        expect(css).toContain("border-top: 4px solid var(--signal)");
+        expect(css).toContain(".result-highlight");
+        expect(css).toContain(".result-number");
+        expect(css).toContain(".metric-rows");
+        expect(css).toContain(".metric-row");
+        expect(css).toContain(".metric-value");
+        expect(css).not.toContain(".outcome-summary-item::before");
         expect(css).not.toContain("border-left: 4px solid var(--steel)");
+        expect(renderTs).not.toContain("📊");
+        expect(renderTs).not.toContain("📉");
+        expect(renderTs).not.toContain("💼");
     });
 
     test("上位5件テーブルの円石払い回ヘッダーを中央揃えにする", () => {
@@ -111,34 +118,21 @@ describe("UI color contrast hooks", () => {
         );
     });
 
-    test("output要約はファンス列と円石列で消費と残量の縦軸を揃える", () => {
+    test("output要約は判定、消費、残高の3カラムにする", () => {
         expect(css).toMatch(
             /\.outcome-summary-item:nth-child\(2\)\s*{[^}]*grid-column:\s*2/s,
         );
         expect(css).toMatch(
             /\.outcome-summary-item:nth-child\(3\)\s*{[^}]*grid-column:\s*3/s,
         );
-        expect(css).toMatch(
-            /\.outcome-summary-item:nth-child\(4\)\s*{[^}]*grid-column:\s*1/s,
-        );
-        expect(css).toMatch(
-            /\.outcome-summary-item:nth-child\(5\)\s*{[^}]*grid-column:\s*2/s,
-        );
-        expect(css).toMatch(
-            /\.outcome-summary-item:nth-child\(6\)\s*{[^}]*grid-column:\s*3/s,
-        );
+        expect(css).not.toContain(".outcome-summary-item:nth-child(4)");
     });
 
-    test("output要約の数値は右端で桁を揃え、判定下に残量サマリーを置く", () => {
-        expect(renderTs).toContain('variant: "balance"');
-        expect(renderTs).toContain("balance-details");
-        expect(css).toContain(".outcome-summary-item.is-balance");
+    test("output要約の消費と残高の数値は右端で桁を揃える", () => {
         expect(css).toMatch(
-            /\.outcome-summary-item:not\(\.is-primary\):not\(\.is-balance\) dd\s*{[^}]*justify-self:\s*end[^}]*text-align:\s*right/s,
+            /\.metric-value\s*{[^}]*text-align:\s*right[^}]*font-variant-numeric:\s*tabular-nums/s,
         );
-        expect(css).toMatch(
-            /\.balance-detail-value\s*{[^}]*text-align:\s*right/s,
-        );
+        expect(css).toContain(".metric-value.is-zero");
     });
 
     test("モバイル幅ではoutput要約の明示配置を解除して1カラムに戻す", () => {

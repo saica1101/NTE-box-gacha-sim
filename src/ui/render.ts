@@ -10,13 +10,17 @@ import type { FormErrors } from "./form";
 
 interface OutcomeMetric {
     label: string;
-    value?: string;
-    isPrimary?: boolean;
-    variant?: "balance";
-    details?: {
-        label: string;
-        value: string;
-    }[];
+    variant: "primary" | "cost" | "balance";
+    count?: number;
+    unit?: string;
+    subtext?: string;
+    rows?: OutcomeMetricRow[];
+}
+
+interface OutcomeMetricRow {
+    label: string;
+    value: string;
+    isZero: boolean;
 }
 
 interface ResultCell {
@@ -24,6 +28,8 @@ interface ResultCell {
     value: string;
     variant?: "number";
 }
+
+type StatusTone = "idle" | "stale" | "loading" | "success" | "error";
 
 export function renderFormErrors(
     elements: AppElements,
@@ -46,7 +52,7 @@ export function renderNotice(
         ? `前回の試算結果です。${message}`
         : message;
 
-    setText(elements.statusMessage, visibleMessage);
+    setStatus(elements, visibleMessage, options.isStale ? "stale" : "idle");
     elements.resultRegion.setAttribute("aria-busy", "false");
     elements.resultContent.classList.toggle("is-stale", options.isStale);
     elements.submitButton.disabled = false;
@@ -61,7 +67,7 @@ export function renderCalculating(elements: AppElements): void {
     elements.resultRegion.setAttribute("aria-busy", "true");
     elements.resultContent.hidden = true;
     elements.resultContent.classList.remove("is-stale");
-    setText(elements.statusMessage, "計算中…");
+    setStatus(elements, "計算中…", "loading");
 }
 
 export function renderError(elements: AppElements, message: string): void {
@@ -69,7 +75,7 @@ export function renderError(elements: AppElements, message: string): void {
     elements.resultContent.hidden = true;
     elements.submitButton.disabled = false;
     elements.submitButton.textContent = "試算する";
-    setText(elements.statusMessage, message);
+    setStatus(elements, message, "error");
 }
 
 export function renderResult(
@@ -83,7 +89,7 @@ export function renderResult(
     elements.submitButton.disabled = false;
     elements.submitButton.textContent = "再試算する";
 
-    setText(elements.statusMessage, "試算が完了しました。");
+    setStatus(elements, "試算が完了しました。", "success");
 
     if (result.status === "unavailable") {
         renderUnavailable(elements);
@@ -91,7 +97,7 @@ export function renderResult(
     }
 
     renderFallbackMessage(elements, result);
-    renderMetrics(elements, input, result);
+    renderMetrics(elements, result);
     renderRoundBreakdown(elements, result);
     renderTopCandidates(elements, result);
     renderPaymentDetails(elements, input, result.best, result.actualPulls);
@@ -129,7 +135,6 @@ function renderFallbackMessage(
 
 function renderMetrics(
     elements: AppElements,
-    input: OptimizerInput,
     result: OptimizationResult,
 ): void {
     const best = result.best;
@@ -141,71 +146,46 @@ function renderMetrics(
 
     const metrics = [
         {
-            label: "判定",
-            value: availabilityLabel(result),
-            isPrimary: true,
+            label: "判定結果",
+            variant: "primary",
+            count: result.actualPulls,
+            unit: "回",
+            subtext: availabilitySubtext(result),
         },
-        { label: "ファンス消費", value: formatNumber(best.fanSpend) },
-        { label: "円石消費", value: formatNumber(best.gemSpend) },
         {
-            label: "消費後残量",
-            variant: "balance",
-            details: [
+            label: "消費コスト",
+            variant: "cost",
+            rows: [
                 {
-                    label: "ファンス",
-                    value: `${formatNumber(input.fanBalance)} → ${formatNumber(best.fanRemain)}`,
+                    label: "ファンス消費",
+                    value: formatNumber(best.fanSpend),
+                    isZero: best.fanSpend === 0,
                 },
                 {
-                    label: "円石",
-                    value: `${formatNumber(input.gemBalance)} → ${formatNumber(best.gemRemain)}`,
+                    label: "円石消費",
+                    value: formatNumber(best.gemSpend),
+                    isZero: best.gemSpend === 0,
                 },
             ],
         },
-        { label: "残ファンス", value: formatNumber(best.fanRemain) },
-        { label: "残円石", value: formatNumber(best.gemRemain) },
-    ] satisfies OutcomeMetric[];
-    const nodes = metrics.map(
-        ({ label, value, isPrimary, variant, details }) => {
-            const item = document.createElement("div");
-            const term = document.createElement("dt");
-            const description = document.createElement("dd");
-
-            item.className = "outcome-summary-item";
-
-            if (isPrimary === true) {
-                item.classList.add("is-primary");
-            }
-
-            if (variant !== undefined) {
-                item.classList.add(`is-${variant}`);
-            }
-
-            term.textContent = label;
-
-            if (details !== undefined) {
-                description.className = "balance-details";
-                details.forEach((detail) => {
-                    const row = document.createElement("span");
-                    const detailLabel = document.createElement("span");
-                    const detailValue = document.createElement("span");
-
-                    row.className = "balance-detail-row";
-                    detailLabel.className = "balance-detail-label";
-                    detailValue.className = "balance-detail-value";
-                    detailLabel.textContent = detail.label;
-                    detailValue.textContent = detail.value;
-                    row.append(detailLabel, detailValue);
-                    description.append(row);
-                });
-            } else {
-                description.textContent = value ?? "";
-            }
-
-            item.append(term, description);
-
-            return item;
+        {
+            label: "残高情報",
+            variant: "balance",
+            rows: [
+                {
+                    label: "残ファンス",
+                    value: formatNumber(best.fanRemain),
+                    isZero: best.fanRemain === 0,
+                },
+                {
+                    label: "残円石",
+                    value: formatNumber(best.gemRemain),
+                    isZero: best.gemRemain === 0,
+                },
+            ],
         },
-    );
+    ] satisfies OutcomeMetric[];
+    const nodes = metrics.map((metric) => createOutcomeMetricNode(metric));
 
     elements.resultMetrics.replaceChildren(...nodes);
 }
@@ -314,16 +294,91 @@ function renderPaymentDetails(
     setText(elements.paymentDetailEmpty, "");
 }
 
-function availabilityLabel(result: OptimizationResult): string {
+function createOutcomeMetricNode(metric: OutcomeMetric): HTMLDivElement {
+    const item = document.createElement("div");
+    const term = document.createElement("dt");
+    const description = document.createElement("dd");
+
+    item.className = `outcome-summary-item is-${metric.variant}`;
+    term.className = "metric-card-title";
+    description.className = "metric-card-body";
+    term.textContent = metric.label;
+
+    if (metric.variant === "primary") {
+        const highlight = document.createElement("div");
+        const number = document.createElement("span");
+        const unit = document.createElement("span");
+        const subtext = document.createElement("span");
+
+        highlight.className = "result-highlight";
+        number.className = "result-number";
+        unit.className = "result-unit";
+        subtext.className = "result-subtext";
+        number.textContent = String(metric.count ?? 0);
+        unit.textContent = metric.unit ?? "";
+        subtext.textContent = metric.subtext ?? "";
+        number.append(unit);
+        highlight.append(number);
+        description.append(highlight, subtext);
+    } else {
+        const rows = document.createElement("div");
+
+        rows.className = "metric-rows";
+        metric.rows?.forEach((metricRow) => {
+            const row = document.createElement("span");
+            const label = document.createElement("span");
+            const value = document.createElement("span");
+
+            row.className = "metric-row";
+            label.className = "metric-label";
+            value.className = "metric-value";
+
+            if (metricRow.isZero) {
+                value.classList.add("is-zero");
+            }
+
+            label.textContent = metricRow.label;
+            value.textContent = metricRow.value;
+            row.append(label, value);
+            rows.append(row);
+        });
+        description.append(rows);
+    }
+
+    item.append(term, description);
+
+    return item;
+}
+
+function availabilitySubtext(result: OptimizationResult): string {
     if (result.status === "available") {
-        return `${result.requestedPulls}回まで購入可能`;
+        return "まで購入可能";
     }
 
     if (result.status === "fallback") {
-        return `最大${result.actualPulls}回まで購入可能`;
+        return "まで購入可能";
     }
 
     return "購入不可";
+}
+
+function setStatus(
+    elements: AppElements,
+    message: string,
+    tone: StatusTone,
+): void {
+    const statusAlert = elements.statusMessage.closest(".status-alert");
+
+    statusAlert?.classList.remove(
+        "is-idle",
+        "is-stale",
+        "is-loading",
+        "is-success",
+        "is-error",
+    );
+    statusAlert?.classList.add(`is-${tone}`);
+    setText(elements.statusMessage, message);
+    setText(elements.fallbackMessage, "");
 }
 
 function setText(element: HTMLElement, value: string): void {

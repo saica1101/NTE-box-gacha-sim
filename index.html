@@ -252,10 +252,12 @@
                     <p class="eyebrow">Output</p>
                     <h2 id="result-heading" tabindex="-1">試算状態</h2>
                 </div>
-                <p id="status-message" class="status-message"></p>
+                <div class="status-alert">
+                    <p id="status-message" class="status-message"></p>
+                    <p id="fallback-message" class="status-detail"></p>
+                </div>
 
                 <div id="result-content" class="result-content" hidden>
-                    <p id="fallback-message" class="fallback-message"></p>
                     <dl id="result-metrics" class="outcome-summary"></dl>
 
                     <section aria-labelledby="rounds-heading">
