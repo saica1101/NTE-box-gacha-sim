@@ -66,6 +66,27 @@ describe("UI color contrast hooks", () => {
         expect(css).not.toContain("width: 38%");
     });
 
+    test("outputの要約は購入可否と消費量と残量だけを見せる", () => {
+        expect(html).toContain(
+            '<dl id="result-metrics" class="outcome-summary"></dl>',
+        );
+        expect(css).toContain(".outcome-summary");
+        expect(css).toContain(".outcome-summary-item");
+        expect(css).toContain(".outcome-summary-item.is-primary");
+        expect(renderTs).toContain('label: "判定"');
+        expect(renderTs).toContain('label: "ファンス消費"');
+        expect(renderTs).toContain('label: "円石消費"');
+        expect(renderTs).toContain('label: "残ファンス"');
+        expect(renderTs).toContain('label: "残円石"');
+        expect(renderTs).not.toContain('label: "指定回数"');
+        expect(renderTs).not.toContain('label: "実際に計算した回数"');
+        expect(renderTs).not.toContain('label: "計算候補数"');
+        expect(renderTs).not.toContain('label: "ファンス消費率"');
+        expect(renderTs).not.toContain('label: "円石消費率"');
+        expect(renderTs).toContain("試算が完了しました。");
+        expect(renderTs).not.toContain("試算完了：${totalElapsedMs");
+    });
+
     test("output内の表はカード幅に収まり、狭い幅では行内ラベルを表示する", () => {
         expect(html).toContain('class="table-wrap result-table-wrap"');
         expect(html).toContain(

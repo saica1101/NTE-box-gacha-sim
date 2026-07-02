@@ -4,9 +4,15 @@ import type {
     OptimizerInput,
 } from "../domain/types";
 import { formatRounds } from "../utils/format";
-import { formatNumber, formatPercent } from "../utils/numbers";
+import { formatNumber } from "../utils/numbers";
 import type { AppElements } from "./elements";
 import type { FormErrors } from "./form";
+
+interface OutcomeMetric {
+    label: string;
+    value: string;
+    isPrimary?: boolean;
+}
 
 interface ResultCell {
     label: string;
@@ -65,7 +71,6 @@ export function renderResult(
     elements: AppElements,
     input: OptimizerInput,
     result: OptimizationResult,
-    totalElapsedMs: number,
 ): void {
     elements.resultRegion.setAttribute("aria-busy", "false");
     elements.resultContent.hidden = false;
@@ -73,10 +78,7 @@ export function renderResult(
     elements.submitButton.disabled = false;
     elements.submitButton.textContent = "再試算する";
 
-    setText(
-        elements.statusMessage,
-        `試算完了：${totalElapsedMs.toFixed(1)}ms（最適化 ${result.calculationElapsedMs.toFixed(1)}ms）`,
-    );
+    setText(elements.statusMessage, "試算が完了しました。");
 
     if (result.status === "unavailable") {
         renderUnavailable(elements);
@@ -132,23 +134,32 @@ function renderMetrics(
     }
 
     const metrics = [
-        ["判定", statusLabel(result.status)],
-        ["指定回数", `${result.requestedPulls}回`],
-        ["実際に計算した回数", `${result.actualPulls}回`],
-        ["ファンス消費", formatNumber(best.fanSpend)],
-        ["円石消費", formatNumber(best.gemSpend)],
-        ["残ファンス", formatNumber(best.fanRemain)],
-        ["残円石", formatNumber(best.gemRemain)],
-        ["ファンス消費率", formatPercent(best.fanRate)],
-        ["円石消費率", formatPercent(best.gemRate)],
-        ["計算候補数", formatNumber(result.stats.patternCount)],
-    ];
-    const nodes = metrics.flatMap(([label, value]) => {
+        {
+            label: "判定",
+            value: availabilityLabel(result),
+            isPrimary: true,
+        },
+        { label: "ファンス消費", value: formatNumber(best.fanSpend) },
+        { label: "円石消費", value: formatNumber(best.gemSpend) },
+        { label: "残ファンス", value: formatNumber(best.fanRemain) },
+        { label: "残円石", value: formatNumber(best.gemRemain) },
+    ] satisfies OutcomeMetric[];
+    const nodes = metrics.map(({ label, value, isPrimary }) => {
+        const item = document.createElement("div");
         const term = document.createElement("dt");
         const description = document.createElement("dd");
+
+        item.className = "outcome-summary-item";
+
+        if (isPrimary === true) {
+            item.classList.add("is-primary");
+        }
+
         term.textContent = label;
         description.textContent = value;
-        return [term, description];
+        item.append(term, description);
+
+        return item;
     });
 
     elements.resultMetrics.replaceChildren(...nodes);
@@ -258,13 +269,13 @@ function renderPaymentDetails(
     setText(elements.paymentDetailEmpty, "");
 }
 
-function statusLabel(status: OptimizationResult["status"]): string {
-    if (status === "available") {
-        return "指定回数を購入可能";
+function availabilityLabel(result: OptimizationResult): string {
+    if (result.status === "available") {
+        return `${result.requestedPulls}回まで購入可能`;
     }
 
-    if (status === "fallback") {
-        return "指定回数は不足、最大回数で試算";
+    if (result.status === "fallback") {
+        return `最大${result.actualPulls}回まで購入可能`;
     }
 
     return "購入不可";

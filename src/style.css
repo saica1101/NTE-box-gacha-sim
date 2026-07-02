@@ -560,10 +560,13 @@ thead th {
 }
 
 .status-message {
-    min-height: 32px;
-    padding: 12px;
-    border-left: 6px solid var(--signal);
+    display: inline-flex;
+    max-width: 100%;
+    min-height: 0;
+    padding: 8px 12px;
+    border-left: 4px solid var(--signal);
     background: rgb(210 73 42 / 9%);
+    color: var(--ink);
     font-weight: 800;
 }
 
@@ -576,29 +579,56 @@ thead th {
     filter: grayscale(0.3);
 }
 
-.metrics-grid {
+.outcome-summary {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
+    grid-template-columns: minmax(220px, 1.25fr) repeat(2, minmax(150px, 1fr));
+    gap: 10px;
+    width: min(820px, 100%);
     margin: 18px 0;
-    border: 1px solid var(--line);
-    background: var(--line);
 }
 
-.metrics-grid dt,
-.metrics-grid dd {
+.outcome-summary-item {
+    display: grid;
+    gap: 6px;
+    align-content: center;
+    min-width: 0;
     margin: 0;
-    padding: 12px;
-    background: #fffdfa;
+    padding: 12px 14px;
+    border: 1px solid var(--line-soft);
+    border-left: 4px solid var(--steel);
+    border-radius: 6px;
+    background: rgb(47 93 100 / 8%);
 }
 
-.metrics-grid dt {
+.outcome-summary-item dt {
     color: var(--ink-soft);
+    font-size: 0.78rem;
     font-weight: 800;
+    letter-spacing: 0.06em;
 }
 
-.metrics-grid dd {
-    font-weight: 800;
+.outcome-summary-item dd {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25;
+}
+
+.outcome-summary-item.is-primary {
+    grid-row: span 2;
+    border-color: var(--line);
+    background: var(--ink);
+    color: var(--surface-raised);
+}
+
+.outcome-summary-item.is-primary dt {
+    color: rgb(255 250 240 / 74%);
+}
+
+.outcome-summary-item.is-primary dd {
+    font-size: 1.3rem;
+    line-height: 1.35;
 }
 
 .round-pairs {
@@ -645,7 +675,7 @@ thead th {
     }
 
     .mode-segments,
-    .metrics-grid {
+    .outcome-summary {
         grid-template-columns: 1fr;
     }
 
@@ -738,12 +768,21 @@ thead th {
     input,
     select,
     .mode-segments span,
-    .metrics-grid dt,
-    .metrics-grid dd,
+    .outcome-summary-item,
     .round-pairs p,
     .cost-row {
         color: var(--ink);
         background: #10181d;
+    }
+
+    .outcome-summary-item.is-primary {
+        border-color: var(--signal);
+        background: var(--signal);
+        color: #10181d;
+    }
+
+    .outcome-summary-item.is-primary dt {
+        color: rgb(16 24 29 / 72%);
     }
 
     .primary {

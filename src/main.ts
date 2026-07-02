@@ -159,18 +159,16 @@ async function handleSubmit(event: SubmitEvent): Promise<void> {
 
     isCalculating = true;
     renderCalculating(elements);
-    const totalStartedAt = performance.now();
 
     try {
         await nextAnimationFrame();
         const result = optimize(read.input);
-        const totalElapsedMs = performance.now() - totalStartedAt;
         hasCalculated = true;
         savePersistedState(
             window.localStorage,
             toPersistedState(read.input, getSelectedBoxGachaId()),
         );
-        renderResult(elements, read.input, result, totalElapsedMs);
+        renderResult(elements, read.input, result);
         scrollToOutput();
     } catch (error) {
         console.error("試算処理で予期しないエラーが発生しました。", error);
