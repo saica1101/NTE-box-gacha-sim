@@ -168,22 +168,24 @@ function renderTopCandidates(
 ): void {
     const rows = result.recommendations.map((candidate, index) => {
         const row = document.createElement("tr");
-        const values = [
-            `${index + 1}`,
-            formatNumber(candidate.fanSpend),
-            formatNumber(candidate.gemSpend),
-            formatNumber(candidate.fanRemain),
-            formatNumber(candidate.gemRemain),
-            formatPercent(candidate.fanRate),
-            formatPercent(candidate.gemRate),
-            formatRounds(candidate, "gems", result.actualPulls),
+        const cells = [
+            { label: "順位", value: `${index + 1}` },
+            { label: "消費ファンス", value: formatNumber(candidate.fanSpend) },
+            { label: "消費円石", value: formatNumber(candidate.gemSpend) },
+            { label: "残ファンス", value: formatNumber(candidate.fanRemain) },
+            { label: "残円石", value: formatNumber(candidate.gemRemain) },
+            {
+                label: "ファンス消費率",
+                value: formatPercent(candidate.fanRate),
+            },
+            { label: "円石消費率", value: formatPercent(candidate.gemRate) },
+            {
+                label: "円石払い回",
+                value: formatRounds(candidate, "gems", result.actualPulls),
+            },
         ];
 
-        values.forEach((value) => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.append(cell);
-        });
+        appendLabeledCells(row, cells);
 
         return row;
     });
@@ -212,18 +214,23 @@ function renderPaymentDetails(
         const cost = input.costs.at(index);
         const isGemPayment = (candidate.mask & (1 << index)) !== 0;
         const row = document.createElement("tr");
-        const values = [
-            `${round}回目`,
-            isGemPayment ? "円石払い" : "ファンス払い",
-            isGemPayment ? "—" : formatNumber(cost?.fans ?? 0),
-            isGemPayment ? formatNumber(cost?.gems ?? 0) : "—",
+        const cells = [
+            { label: "回数", value: `${round}回目` },
+            {
+                label: "支払い方法",
+                value: isGemPayment ? "円石払い" : "ファンス払い",
+            },
+            {
+                label: "必要ファンス",
+                value: isGemPayment ? "—" : formatNumber(cost?.fans ?? 0),
+            },
+            {
+                label: "必要円石",
+                value: isGemPayment ? formatNumber(cost?.gems ?? 0) : "—",
+            },
         ];
 
-        values.forEach((value) => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.append(cell);
-        });
+        appendLabeledCells(row, cells);
 
         return row;
     });
@@ -246,4 +253,16 @@ function statusLabel(status: OptimizationResult["status"]): string {
 
 function setText(element: HTMLElement, value: string): void {
     element.textContent = value;
+}
+
+function appendLabeledCells(
+    row: HTMLTableRowElement,
+    cells: { label: string; value: string }[],
+): void {
+    cells.forEach(({ label, value }) => {
+        const cell = document.createElement("td");
+        cell.dataset.label = label;
+        cell.textContent = value;
+        row.append(cell);
+    });
 }

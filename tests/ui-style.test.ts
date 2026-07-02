@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 
 const css = readFileSync("src/style.css", "utf8");
 const html = readFileSync("index.html", "utf8");
+const renderTs = readFileSync("src/ui/render.ts", "utf8");
 
 describe("UI color contrast hooks", () => {
     test("選択中モードとテーブルヘッダーに専用の色トークンを使う", () => {
@@ -22,5 +23,24 @@ describe("UI color contrast hooks", () => {
         expect(html).not.toContain('<th scope="col">ファンス消費</th>');
         expect(html).not.toContain('<th scope="col">円石消費</th>');
         expect(css).toContain("white-space: nowrap");
+    });
+
+    test("output内の表はカード幅に収まり、狭い幅では行内ラベルを表示する", () => {
+        expect(html).toContain('class="table-wrap result-table-wrap"');
+        expect(html).toContain(
+            '<table class="result-table top-candidates-table">',
+        );
+        expect(html).toContain(
+            '<table class="result-table payment-detail-table">',
+        );
+        expect(css).toContain(".result-panel .table-wrap");
+        expect(css).toContain("overflow-x: visible");
+        expect(css).toContain(".result-table");
+        expect(css).toContain("min-width: 0");
+        expect(css).toContain("table-layout: fixed");
+        expect(css).toContain("container-type: inline-size");
+        expect(css).toContain("@container");
+        expect(css).toContain("content: attr(data-label)");
+        expect(renderTs).toContain("cell.dataset.label = label");
     });
 });
