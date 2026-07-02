@@ -8,7 +8,8 @@ import { defaultBoxGachaId, getBoxGachaById } from "../data/boxGachas";
 import type { OptimizationMode, RoundCost } from "../domain/types";
 import { isOptimizationMode, validateCosts } from "../domain/validation";
 
-export const storageKey = "nte-draco-box-sim";
+export const storageKey = "nte-box-gacha-sim";
+const legacyStorageKey = "nte-draco-box-sim";
 
 export interface PersistedState {
     version: 1;
@@ -35,7 +36,8 @@ export function createDefaultPersistedState(): PersistedState {
 }
 
 export function loadPersistedState(storage: Storage): PersistedState {
-    const source = storage.getItem(storageKey);
+    const source =
+        storage.getItem(storageKey) ?? storage.getItem(legacyStorageKey);
 
     if (source === null) {
         return createDefaultPersistedState();

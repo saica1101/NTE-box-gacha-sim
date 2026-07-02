@@ -6,10 +6,31 @@ const html = readFileSync("index.html", "utf8");
 const elementsTs = readFileSync("src/ui/elements.ts", "utf8");
 const formTs = readFileSync("src/ui/form.ts", "utf8");
 const mainTs = readFileSync("src/main.ts", "utf8");
+const packageJson = readFileSync("package.json", "utf8");
 const renderTs = readFileSync("src/ui/render.ts", "utf8");
 const shareUrlTs = readFileSync("src/utils/shareUrl.ts", "utf8");
 
 describe("UI color contrast hooks", () => {
+    test("ページタイトルとプロジェクト名をNTE ボックスガチャシミュへ統一する", () => {
+        expect(html).toContain("<title>NTE ボックスガチャシミュ</title>");
+        expect(html).toContain("<h1>NTE ボックスガチャシミュ</h1>");
+        expect(html).not.toContain("Draco Box 支払い試算");
+        expect(packageJson).toContain('"name": "nte-box-gacha-sim"');
+    });
+
+    test("計算後はoutputへ移動し、右下の丸型ボタンからinputへ戻れる", () => {
+        expect(html).toContain('id="back-to-top-button"');
+        expect(html).toContain('aria-label="入力欄へ戻る"');
+        expect(elementsTs).toContain("inputSection");
+        expect(elementsTs).toContain("backToTopButton");
+        expect(mainTs).toContain("scrollToOutput");
+        expect(mainTs).toContain("scrollToInput");
+        expect(mainTs).toContain("scrollIntoView");
+        expect(css).toContain(".scroll-top-button");
+        expect(css).toContain("position: fixed");
+        expect(css).toContain("border-radius: 999px");
+    });
+
     test("選択中モードとテーブルヘッダーに専用の色トークンを使う", () => {
         expect(css).toContain("--mode-selected-bg");
         expect(css).toContain("--mode-selected-ink");

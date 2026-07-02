@@ -63,6 +63,10 @@ elements.form.addEventListener("submit", (event) => {
     void handleSubmit(event);
 });
 
+elements.backToTopButton.addEventListener("click", () => {
+    scrollToInput();
+});
+
 elements.resetCostsButton.addEventListener("click", () => {
     applySelectedBoxGachaCosts();
     handleInputChange(
@@ -149,6 +153,7 @@ async function handleSubmit(event: SubmitEvent): Promise<void> {
 
     if (read.input === null) {
         renderError(elements, "入力内容を確認してください。");
+        scrollToOutput();
         return;
     }
 
@@ -166,15 +171,32 @@ async function handleSubmit(event: SubmitEvent): Promise<void> {
             toPersistedState(read.input, getSelectedBoxGachaId()),
         );
         renderResult(elements, read.input, result, totalElapsedMs);
+        scrollToOutput();
     } catch (error) {
         console.error("試算処理で予期しないエラーが発生しました。", error);
         renderError(
             elements,
             "予期しないエラーが発生しました。入力内容を確認して再度お試しください。",
         );
+        scrollToOutput();
     } finally {
         isCalculating = false;
     }
+}
+
+function scrollToOutput(): void {
+    elements.resultRegion.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+    elements.resultHeading.focus({ preventScroll: true });
+}
+
+function scrollToInput(): void {
+    elements.inputSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
 }
 
 function applySelectedBoxGachaCosts(): void {

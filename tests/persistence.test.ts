@@ -4,6 +4,7 @@ import {
     createDefaultPersistedState,
     loadPersistedState,
     savePersistedState,
+    storageKey,
 } from "../src/storage/persistence";
 import type { PersistedState } from "../src/storage/persistence";
 
@@ -56,11 +57,39 @@ describe("persistence", () => {
 
     test("壊れたlocalStorageは安全に初期値へ戻す", () => {
         const storage = new MemoryStorage();
-        storage.setItem("nte-draco-box-sim", "{not json");
+        storage.setItem(storageKey, "{not json");
 
         expect(loadPersistedState(storage)).toEqual(
             createDefaultPersistedState(),
         );
+    });
+
+    test("保存キーを新しいプロジェクト名に合わせる", () => {
+        const storage = new MemoryStorage();
+
+        savePersistedState(storage, createDefaultPersistedState());
+
+        expect(storageKey).toBe("nte-box-gacha-sim");
+        expect(storage.getItem("nte-box-gacha-sim")).not.toBeNull();
+        expect(storage.getItem("nte-draco-box-sim")).toBeNull();
+    });
+
+    test("旧プロジェクト名の保存値も移行用に復元する", () => {
+        const storage = new MemoryStorage();
+        const state: PersistedState = {
+            version: 1,
+            boxGachaId: "draco",
+            fanBalance: 5_000,
+            gemBalance: 300,
+            targetPulls: 12,
+            mode: "balance",
+            gemFanValue: 2_000,
+            costs: defaultCosts,
+        };
+
+        storage.setItem("nte-draco-box-sim", JSON.stringify(state));
+
+        expect(loadPersistedState(storage)).toEqual(state);
     });
 
     test("旧形式のlocalStorageは既定ガチャIDを補って復元する", () => {

@@ -1,5 +1,6 @@
 export interface AppElements {
     form: HTMLFormElement;
+    inputSection: HTMLElement;
     boxGachaSelect: HTMLSelectElement;
     fanBalanceInput: HTMLInputElement;
     fanBalanceError: HTMLElement;
@@ -17,6 +18,7 @@ export interface AppElements {
     closeCostsButton: HTMLButtonElement;
     resetCostsButton: HTMLButtonElement;
     submitButton: HTMLButtonElement;
+    backToTopButton: HTMLButtonElement;
     resultRegion: HTMLElement;
     resultHeading: HTMLElement;
     statusMessage: HTMLElement;
@@ -34,6 +36,7 @@ export interface AppElements {
 export function getAppElements(): AppElements {
     return {
         form: getElement("sim-form", HTMLFormElement),
+        inputSection: getElement("input-section", HTMLElement),
         boxGachaSelect: getElement("box-gacha", HTMLSelectElement),
         fanBalanceInput: getElement("fan-balance", HTMLInputElement),
         fanBalanceError: getElement("fan-balance-error", HTMLElement),
@@ -54,6 +57,7 @@ export function getAppElements(): AppElements {
         closeCostsButton: getElement("close-costs-button", HTMLButtonElement),
         resetCostsButton: getElement("reset-costs-button", HTMLButtonElement),
         submitButton: getElement("submit-button", HTMLButtonElement),
+        backToTopButton: getElement("back-to-top-button", HTMLButtonElement),
         resultRegion: getElement("result-region", HTMLElement),
         resultHeading: getElement("result-heading", HTMLElement),
         statusMessage: getElement("status-message", HTMLElement),

@@ -320,6 +320,11 @@ button:disabled {
     opacity: 0.65;
 }
 
+.input-section,
+.result-panel {
+    scroll-margin-top: 18px;
+}
+
 .primary {
     color: #fffdfa;
     background: var(--signal);
@@ -328,6 +333,34 @@ button:disabled {
 .secondary {
     color: var(--ink);
     background: var(--steel-soft);
+}
+
+.scroll-top-button {
+    position: fixed;
+    right: clamp(16px, 4vw, 32px);
+    bottom: clamp(16px, 4vw, 32px);
+    z-index: 20;
+    display: grid;
+    width: 48px;
+    min-height: 0;
+    height: 48px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: #fffdfa;
+    background: var(--signal);
+    box-shadow: var(--shadow);
+    font-size: 1.28rem;
+    line-height: 1;
+    transition:
+        transform 140ms ease,
+        background-color 140ms ease;
+}
+
+.scroll-top-button:hover {
+    background: var(--signal-strong);
+    transform: translateY(-2px);
 }
 
 .settings-panel {
@@ -642,6 +675,13 @@ thead th {
     .settings-dialog-actions button {
         width: 100%;
     }
+
+    .scroll-top-button {
+        right: 14px;
+        bottom: 14px;
+        width: 44px;
+        height: 44px;
+    }
 }
 
 @container (max-width: 640px) {
@@ -717,6 +757,10 @@ thead th {
     }
 
     .primary {
+        color: #10181d;
+    }
+
+    .scroll-top-button {
         color: #10181d;
     }
 }
