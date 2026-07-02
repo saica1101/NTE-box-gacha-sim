@@ -1,0 +1,255 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: Neverness To Everness
+      - heading "Draco Box 支払い試算盤" [level=1] [ref=e6]
+      - paragraph [ref=e7]: ファンスと円石の残量を見ながら、15回分の支払い配分を ボタン操作で決定します。
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - region "試算条件" [ref=e16]:
+        - generic [ref=e17]:
+          - paragraph [ref=e18]: Input
+          - heading "試算条件" [level=2] [ref=e19]
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - generic [ref=e22]: 所持ファンス
+            - textbox "所持ファンス" [ref=e23]: 11,800,000
+            - paragraph [ref=e24]: カンマと全角数字を使用できます。
+            - paragraph
+          - generic [ref=e25]:
+            - generic [ref=e26]: 所持円石
+            - textbox "所持円石" [ref=e27]: 5,980
+            - paragraph [ref=e28]: 0以上の整数で入力してください。
+            - paragraph
+          - generic [ref=e29]:
+            - generic [ref=e30]: 引きたい回数
+            - combobox "引きたい回数" [ref=e31]:
+              - option "1回"
+              - option "2回"
+              - option "3回"
+              - option "4回"
+              - option "5回"
+              - option "6回"
+              - option "7回"
+              - option "8回"
+              - option "9回"
+              - option "10回"
+              - option "11回"
+              - option "12回"
+              - option "13回"
+              - option "14回"
+              - option "15回" [selected]
+          - generic [ref=e32]:
+            - generic [ref=e33]: 円石1個のファンス換算
+            - textbox "円石1個のファンス換算" [disabled] [ref=e34]: 2,000
+            - paragraph [ref=e35]: 総合コスト（換算）モードで使用します。
+            - paragraph
+        - group "最適化モード" [ref=e36]:
+          - generic [ref=e37]: 最適化モード
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - radio "バランス" [checked] [ref=e40]
+              - generic [ref=e41]: バランス
+            - generic [ref=e42]:
+              - radio "円石温存" [ref=e43]
+              - generic [ref=e44]: 円石温存
+            - generic [ref=e45]:
+              - radio "ファンス温存" [ref=e46]
+              - generic [ref=e47]: ファンス温存
+            - generic [ref=e48]:
+              - radio "総合コスト" [ref=e49]
+              - generic [ref=e50]: 総合コスト
+        - paragraph
+        - generic [ref=e51]:
+          - button "再試算する" [ref=e63] [cursor=pointer]
+          - button "条件を共有" [ref=e53] [cursor=pointer]
+        - paragraph
+      - group [ref=e54]:
+        - generic "詳細設定：回ごとの必要コスト" [ref=e55] [cursor=pointer]
+    - region "試算状態" [ref=e56]:
+      - generic [ref=e57]:
+        - paragraph [ref=e58]: Output
+        - heading "試算状態" [active] [level=2] [ref=e59]
+      - paragraph [ref=e60]: 試算完了：64.8ms（最適化 62.1ms）
+      - generic [ref=e64]:
+        - paragraph [ref=e65]: 指定15回を購入できます。
+        - generic [ref=e66]:
+          - term [ref=e67]: 判定
+          - definition [ref=e68]: 指定回数を購入可能
+          - term [ref=e69]: 指定回数
+          - definition [ref=e70]: 15回
+          - term [ref=e71]: 実際に計算した回数
+          - definition [ref=e72]: 15回
+          - term [ref=e73]: ファンス消費
+          - definition [ref=e74]: 5,600,000
+          - term [ref=e75]: 円石消費
+          - definition [ref=e76]: 2,850
+          - term [ref=e77]: 残ファンス
+          - definition [ref=e78]: 6,200,000
+          - term [ref=e79]: 残円石
+          - definition [ref=e80]: 3,130
+          - term [ref=e81]: ファンス消費率
+          - definition [ref=e82]: 47.5%
+          - term [ref=e83]: 円石消費率
+          - definition [ref=e84]: 47.7%
+          - term [ref=e85]: 計算候補数
+          - definition [ref=e86]: 32,768
+        - region "支払い回の内訳" [ref=e87]:
+          - heading "支払い回の内訳" [level=3] [ref=e88]
+          - generic [ref=e89]:
+            - paragraph [ref=e90]:
+              - strong [ref=e91]: 円石払い
+              - generic [ref=e92]: 10回目・11回目・14回目・15回目
+            - paragraph [ref=e93]:
+              - strong [ref=e94]: ファンス払い
+              - generic [ref=e95]: 1回目・2回目・3回目・4回目・5回目・6回目・7回目・8回目・9回目・12回目・13回目
+        - region "最も得な結果 上位5件" [ref=e96]:
+          - heading "最も得な結果 上位5件" [level=3] [ref=e97]
+          - table "選択した最適化モードで順位付けした候補" [ref=e99]:
+            - caption [ref=e100]: 選択した最適化モードで順位付けした候補
+            - rowgroup [ref=e101]:
+              - row "順位 ファンス消費 円石消費 残ファンス 残円石 ファンス消費率 円石消費率 円石払い回" [ref=e102]:
+                - columnheader "順位" [ref=e103]
+                - columnheader "ファンス消費" [ref=e104]
+                - columnheader "円石消費" [ref=e105]
+                - columnheader "残ファンス" [ref=e106]
+                - columnheader "残円石" [ref=e107]
+                - columnheader "ファンス消費率" [ref=e108]
+                - columnheader "円石消費率" [ref=e109]
+                - columnheader "円石払い回" [ref=e110]
+            - rowgroup [ref=e111]:
+              - row "1 5,600,000 2,850 6,200,000 3,130 47.5% 47.7% 10回目・11回目・14回目・15回目" [ref=e112]:
+                - cell "1" [ref=e113]
+                - cell "5,600,000" [ref=e114]
+                - cell "2,850" [ref=e115]
+                - cell "6,200,000" [ref=e116]
+                - cell "3,130" [ref=e117]
+                - cell "47.5%" [ref=e118]
+                - cell "47.7%" [ref=e119]
+                - cell "10回目・11回目・14回目・15回目" [ref=e120]
+              - row "2 5,650,000 2,850 6,150,000 3,130 47.9% 47.7% 1回目・11回目・12回目・13回目・14回目" [ref=e121]:
+                - cell "2" [ref=e122]
+                - cell "5,650,000" [ref=e123]
+                - cell "2,850" [ref=e124]
+                - cell "6,150,000" [ref=e125]
+                - cell "3,130" [ref=e126]
+                - cell "47.9%" [ref=e127]
+                - cell "47.7%" [ref=e128]
+                - cell "1回目・11回目・12回目・13回目・14回目" [ref=e129]
+              - row "3 5,670,000 2,880 6,130,000 3,100 48.1% 48.2% 2回目・9回目・11回目・14回目・15回目" [ref=e130]:
+                - cell "3" [ref=e131]
+                - cell "5,670,000" [ref=e132]
+                - cell "2,880" [ref=e133]
+                - cell "6,130,000" [ref=e134]
+                - cell "3,100" [ref=e135]
+                - cell "48.1%" [ref=e136]
+                - cell "48.2%" [ref=e137]
+                - cell "2回目・9回目・11回目・14回目・15回目" [ref=e138]
+              - row "4 5,620,000 2,880 6,180,000 3,100 47.6% 48.2% 2回目・11回目・12回目・13回目・14回目" [ref=e139]:
+                - cell "4" [ref=e140]
+                - cell "5,620,000" [ref=e141]
+                - cell "2,880" [ref=e142]
+                - cell "6,180,000" [ref=e143]
+                - cell "3,100" [ref=e144]
+                - cell "47.6%" [ref=e145]
+                - cell "48.2%" [ref=e146]
+                - cell "2回目・11回目・12回目・13回目・14回目" [ref=e147]
+              - row "5 5,700,000 2,850 6,100,000 3,130 48.3% 47.7% 10回目・12回目・13回目・15回目" [ref=e148]:
+                - cell "5" [ref=e149]
+                - cell "5,700,000" [ref=e150]
+                - cell "2,850" [ref=e151]
+                - cell "6,100,000" [ref=e152]
+                - cell "3,130" [ref=e153]
+                - cell "48.3%" [ref=e154]
+                - cell "47.7%" [ref=e155]
+                - cell "10回目・12回目・13回目・15回目" [ref=e156]
+          - paragraph
+        - region "1位候補の各回支払い" [ref=e157]:
+          - heading "1位候補の各回支払い" [level=3] [ref=e158]
+          - table "各回の支払い方法と必要コスト" [ref=e160]:
+            - caption [ref=e161]: 各回の支払い方法と必要コスト
+            - rowgroup [ref=e162]:
+              - row "回数 支払い方法 必要ファンス 必要円石" [ref=e163]:
+                - columnheader "回数" [ref=e164]
+                - columnheader "支払い方法" [ref=e165]
+                - columnheader "必要ファンス" [ref=e166]
+                - columnheader "必要円石" [ref=e167]
+            - rowgroup [ref=e168]:
+              - row "1回目 ファンス払い 50,000 —" [ref=e169]:
+                - cell "1回目" [ref=e170]
+                - cell "ファンス払い" [ref=e171]
+                - cell "50,000" [ref=e172]
+                - cell "—" [ref=e173]
+              - row "2回目 ファンス払い 80,000 —" [ref=e174]:
+                - cell "2回目" [ref=e175]
+                - cell "ファンス払い" [ref=e176]
+                - cell "80,000" [ref=e177]
+                - cell "—" [ref=e178]
+              - row "3回目 ファンス払い 100,000 —" [ref=e179]:
+                - cell "3回目" [ref=e180]
+                - cell "ファンス払い" [ref=e181]
+                - cell "100,000" [ref=e182]
+                - cell "—" [ref=e183]
+              - row "4回目 ファンス払い 120,000 —" [ref=e184]:
+                - cell "4回目" [ref=e185]
+                - cell "ファンス払い" [ref=e186]
+                - cell "120,000" [ref=e187]
+                - cell "—" [ref=e188]
+              - row "5回目 ファンス払い 150,000 —" [ref=e189]:
+                - cell "5回目" [ref=e190]
+                - cell "ファンス払い" [ref=e191]
+                - cell "150,000" [ref=e192]
+                - cell "—" [ref=e193]
+              - row "6回目 ファンス払い 300,000 —" [ref=e194]:
+                - cell "6回目" [ref=e195]
+                - cell "ファンス払い" [ref=e196]
+                - cell "300,000" [ref=e197]
+                - cell "—" [ref=e198]
+              - row "7回目 ファンス払い 450,000 —" [ref=e199]:
+                - cell "7回目" [ref=e200]
+                - cell "ファンス払い" [ref=e201]
+                - cell "450,000" [ref=e202]
+                - cell "—" [ref=e203]
+              - row "8回目 ファンス払い 600,000 —" [ref=e204]:
+                - cell "8回目" [ref=e205]
+                - cell "ファンス払い" [ref=e206]
+                - cell "600,000" [ref=e207]
+                - cell "—" [ref=e208]
+              - row "9回目 ファンス払い 750,000 —" [ref=e209]:
+                - cell "9回目" [ref=e210]
+                - cell "ファンス払い" [ref=e211]
+                - cell "750,000" [ref=e212]
+                - cell "—" [ref=e213]
+              - row "10回目 円石払い — 450" [ref=e214]:
+                - cell "10回目" [ref=e215]
+                - cell "円石払い" [ref=e216]
+                - cell "—" [ref=e217]
+                - cell "450" [ref=e218]
+              - row "11回目 円石払い — 500" [ref=e219]:
+                - cell "11回目" [ref=e220]
+                - cell "円石払い" [ref=e221]
+                - cell "—" [ref=e222]
+                - cell "500" [ref=e223]
+              - row "12回目 ファンス払い 1,300,000 —" [ref=e224]:
+                - cell "12回目" [ref=e225]
+                - cell "ファンス払い" [ref=e226]
+                - cell "1,300,000" [ref=e227]
+                - cell "—" [ref=e228]
+              - row "13回目 ファンス払い 1,700,000 —" [ref=e229]:
+                - cell "13回目" [ref=e230]
+                - cell "ファンス払い" [ref=e231]
+                - cell "1,700,000" [ref=e232]
+                - cell "—" [ref=e233]
+              - row "14回目 円石払い — 900" [ref=e234]:
+                - cell "14回目" [ref=e235]
+                - cell "円石払い" [ref=e236]
+                - cell "—" [ref=e237]
+                - cell "900" [ref=e238]
+              - row "15回目 円石払い — 1,000" [ref=e239]:
+                - cell "15回目" [ref=e240]
+                - cell "円石払い" [ref=e241]
+                - cell "—" [ref=e242]
+                - cell "1,000" [ref=e243]
+          - paragraph
+  - contentinfo [ref=e61]:
+    - paragraph [ref=e62]: 入力内容はブラウザ内で処理され、外部APIやバックエンドへ送信されません。

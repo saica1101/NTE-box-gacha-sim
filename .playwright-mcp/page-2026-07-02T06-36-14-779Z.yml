@@ -1,0 +1,75 @@
+- generic [active] [ref=e1]:
+      - banner [ref=e2]:
+            - generic [ref=e4]:
+                  - paragraph [ref=e5]: Neverness To Everness
+                  - heading "Draco Box 支払い試算盤" [level=1] [ref=e6]
+                  - paragraph [ref=e7]: ファンスと円石の残量を見ながら、15回分の支払い配分を ボタン操作で決定します。
+      - main [ref=e14]:
+            - generic [ref=e15]:
+                  - region "試算条件" [ref=e16]:
+                        - generic [ref=e17]:
+                              - paragraph [ref=e18]: Input
+                              - heading "試算条件" [level=2] [ref=e19]
+                        - generic [ref=e20]:
+                              - generic [ref=e21]:
+                                    - generic [ref=e22]: 所持ファンス
+                                    - textbox "所持ファンス" [ref=e23]: 11,800,000
+                                    - paragraph [ref=e24]: カンマと全角数字を使用できます。
+                                    - paragraph
+                              - generic [ref=e25]:
+                                    - generic [ref=e26]: 所持円石
+                                    - textbox "所持円石" [ref=e27]: 5,980
+                                    - paragraph [ref=e28]: 0以上の整数で入力してください。
+                                    - paragraph
+                              - generic [ref=e29]:
+                                    - generic [ref=e30]: 引きたい回数
+                                    - combobox "引きたい回数" [ref=e31]:
+                                          - option "1回"
+                                          - option "2回"
+                                          - option "3回"
+                                          - option "4回"
+                                          - option "5回"
+                                          - option "6回"
+                                          - option "7回"
+                                          - option "8回"
+                                          - option "9回"
+                                          - option "10回"
+                                          - option "11回"
+                                          - option "12回"
+                                          - option "13回"
+                                          - option "14回"
+                                          - option "15回" [selected]
+                              - generic [ref=e32]:
+                                    - generic [ref=e33]: 円石1個のファンス換算
+                                    - textbox "円石1個のファンス換算" [disabled] [ref=e34]: 2,000
+                                    - paragraph [ref=e35]: 総合コスト（換算）モードで使用します。
+                                    - paragraph
+                        - group "最適化モード" [ref=e36]:
+                              - generic [ref=e37]: 最適化モード
+                              - generic [ref=e38]:
+                                    - generic [ref=e39]:
+                                          - radio "バランス" [checked] [ref=e40]
+                                          - generic [ref=e41]: バランス
+                                    - generic [ref=e42]:
+                                          - radio "円石温存" [ref=e43]
+                                          - generic [ref=e44]: 円石温存
+                                    - generic [ref=e45]:
+                                          - radio "ファンス温存" [ref=e46]
+                                          - generic [ref=e47]: ファンス温存
+                                    - generic [ref=e48]:
+                                          - radio "総合コスト" [ref=e49]
+                                          - generic [ref=e50]: 総合コスト
+                        - paragraph
+                        - generic [ref=e51]:
+                              - button "試算する" [ref=e52] [cursor=pointer]
+                              - button "条件を共有" [ref=e53] [cursor=pointer]
+                        - paragraph
+                  - group [ref=e54]:
+                        - generic "詳細設定：回ごとの必要コスト" [ref=e55] [cursor=pointer]
+            - region "試算状態" [ref=e56]:
+                  - generic [ref=e57]:
+                        - paragraph [ref=e58]: Output
+                        - heading "試算状態" [level=2] [ref=e59]
+                  - paragraph [ref=e60]: 条件を確認して「試算する」を押してください。
+      - contentinfo [ref=e61]:
+            - paragraph [ref=e62]: 入力内容はブラウザ内で処理され、外部APIやバックエンドへ送信されません。

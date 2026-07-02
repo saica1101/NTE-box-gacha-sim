@@ -1,9 +1,59 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic reporst
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Direcotry for instrumented code converage writes
+converage
+*.lcov
+
+# Dependency directories
 node_modules/
-dist/
-coverage/
-.vite/
-.playwright-mcp/
-.playwright-cli/
+jspm_packages/
+
+# TypeScript cache
 *.tsbuildinfo
+.tsconfig.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Output direcotry
+dist/
+dist-ssr/
 *.local
-.git/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Project specific
+.playwright-cli/
+.artifacts/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# OS files
+.DS_Store
+Thumbs.db

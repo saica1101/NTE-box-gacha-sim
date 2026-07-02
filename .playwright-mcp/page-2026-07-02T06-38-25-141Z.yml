@@ -1,0 +1,60 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: Neverness To Everness
+      - heading "Draco Box 支払い試算盤" [level=1] [ref=e6]
+      - paragraph [ref=e7]: ファンスと円石の残量を見ながら、15回分の支払い配分を ボタン操作で決定します。
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - region "試算条件" [ref=e10]:
+        - generic [ref=e11]:
+          - paragraph [ref=e12]: Input
+          - heading "試算条件" [level=2] [ref=e13]
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - text: 所持ファンス
+            - textbox "所持ファンス" [ref=e16]
+            - paragraph [ref=e17]: カンマと全角数字を使用できます。
+            - paragraph
+          - generic [ref=e18]:
+            - text: 所持円石
+            - textbox "所持円石" [ref=e19]
+            - paragraph [ref=e20]: 0以上の整数で入力してください。
+            - paragraph
+          - generic [ref=e21]:
+            - text: 引きたい回数
+            - combobox "引きたい回数" [ref=e22]
+          - generic [ref=e23]:
+            - text: 円石1個のファンス換算
+            - textbox "円石1個のファンス換算" [ref=e24]
+            - paragraph [ref=e25]: 総合コスト（換算）モードで使用します。
+            - paragraph
+        - group "最適化モード" [ref=e26]:
+          - generic [ref=e27]: 最適化モード
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - radio "バランス" [ref=e30]
+              - text: バランス
+            - generic [ref=e31]:
+              - radio "円石温存" [ref=e32]
+              - text: 円石温存
+            - generic [ref=e33]:
+              - radio "ファンス温存" [ref=e34]
+              - text: ファンス温存
+            - generic [ref=e35]:
+              - radio "総合コスト" [ref=e36]
+              - text: 総合コスト
+        - paragraph
+        - generic [ref=e37]:
+          - button "試算する" [ref=e38]
+          - button "条件を共有" [ref=e39]
+        - paragraph
+      - group [ref=e40]:
+        - generic "詳細設定：回ごとの必要コスト" [ref=e41]
+    - region "試算状態" [ref=e42]:
+      - generic [ref=e43]:
+        - paragraph [ref=e44]: Output
+        - heading "試算状態" [level=2] [ref=e45]
+      - paragraph
+  - contentinfo [ref=e46]:
+    - paragraph [ref=e47]: 入力内容はブラウザ内で処理され、外部APIやバックエンドへ送信されません。
