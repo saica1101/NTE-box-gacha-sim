@@ -3,8 +3,11 @@ import { readFileSync } from "node:fs";
 
 const css = readFileSync("src/style.css", "utf8");
 const html = readFileSync("index.html", "utf8");
+const elementsTs = readFileSync("src/ui/elements.ts", "utf8");
 const formTs = readFileSync("src/ui/form.ts", "utf8");
+const mainTs = readFileSync("src/main.ts", "utf8");
 const renderTs = readFileSync("src/ui/render.ts", "utf8");
+const shareUrlTs = readFileSync("src/utils/shareUrl.ts", "utf8");
 
 describe("UI color contrast hooks", () => {
     test("選択中モードとテーブルヘッダーに専用の色トークンを使う", () => {
@@ -52,6 +55,19 @@ describe("UI color contrast hooks", () => {
         expect(css).not.toContain(
             "grid-template-columns: minmax(280px, 420px) minmax(0, 1fr)",
         );
+    });
+
+    test("条件共有ボタンと共有URL作成処理を表示しない", () => {
+        expect(html).not.toContain('id="share-button"');
+        expect(html).not.toContain('id="share-status"');
+        expect(html).not.toContain("条件を共有");
+        expect(elementsTs).not.toContain("shareButton");
+        expect(elementsTs).not.toContain("shareStatus");
+        expect(mainTs).not.toContain("createShareUrl");
+        expect(mainTs).not.toContain("copyText");
+        expect(mainTs).not.toContain("navigator.clipboard");
+        expect(shareUrlTs).not.toContain("createShareUrl");
+        expect(css).not.toContain(".copy-buffer");
     });
 
     test("output内の数値セルは右揃えで、結果表の文字サイズを統一する", () => {

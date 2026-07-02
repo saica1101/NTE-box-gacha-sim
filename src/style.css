@@ -587,12 +587,6 @@ thead th {
     background: #fffdfa;
 }
 
-.copy-buffer {
-    position: fixed;
-    left: -9999px;
-    top: 0;
-}
-
 @media (max-width: 880px) {
     .header-grid {
         grid-template-columns: 1fr;

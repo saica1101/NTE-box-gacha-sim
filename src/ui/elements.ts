@@ -16,8 +16,6 @@ export interface AppElements {
     closeCostsButton: HTMLButtonElement;
     resetCostsButton: HTMLButtonElement;
     submitButton: HTMLButtonElement;
-    shareButton: HTMLButtonElement;
-    shareStatus: HTMLElement;
     resultRegion: HTMLElement;
     resultHeading: HTMLElement;
     statusMessage: HTMLElement;
@@ -54,8 +52,6 @@ export function getAppElements(): AppElements {
         closeCostsButton: getElement("close-costs-button", HTMLButtonElement),
         resetCostsButton: getElement("reset-costs-button", HTMLButtonElement),
         submitButton: getElement("submit-button", HTMLButtonElement),
-        shareButton: getElement("share-button", HTMLButtonElement),
-        shareStatus: getElement("share-status", HTMLElement),
         resultRegion: getElement("result-region", HTMLElement),
         resultHeading: getElement("result-heading", HTMLElement),
         statusMessage: getElement("status-message", HTMLElement),

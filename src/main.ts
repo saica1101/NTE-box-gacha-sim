@@ -19,7 +19,7 @@ import {
     renderResult,
 } from "./ui/render";
 import { nextAnimationFrame } from "./utils/performance";
-import { createShareUrl, parseSharedInput } from "./utils/shareUrl";
+import { parseSharedInput } from "./utils/shareUrl";
 
 const elements = getAppElements();
 let persistedState = loadPersistedState(window.localStorage);
@@ -82,10 +82,6 @@ elements.costSettingsDialog.addEventListener("click", (event) => {
     if (event.target === elements.costSettingsDialog) {
         closeCostSettings();
     }
-});
-
-elements.shareButton.addEventListener("click", () => {
-    void handleShare();
 });
 
 function closeCostSettings(): void {
@@ -159,46 +155,4 @@ async function handleSubmit(event: SubmitEvent): Promise<void> {
     } finally {
         isCalculating = false;
     }
-}
-
-async function handleShare(): Promise<void> {
-    const read = readOptimizerInput(elements);
-    renderFormErrors(elements, read.errors);
-
-    if (read.input === null) {
-        elements.shareStatus.textContent =
-            "共有URLを作成する前に入力内容を確認してください。";
-        return;
-    }
-
-    const url = createShareUrl(new URL(window.location.href), read.input);
-    const isCopied = await copyText(url);
-    elements.shareStatus.textContent = isCopied
-        ? "現在の条件をクリップボードへコピーしました。"
-        : "クリップボードへコピーできませんでした。URLを選択してコピーしてください。";
-}
-
-async function copyText(value: string): Promise<boolean> {
-    if (navigator.clipboard !== undefined) {
-        try {
-            await navigator.clipboard.writeText(value);
-            return true;
-        } catch {
-            return fallbackCopy(value);
-        }
-    }
-
-    return fallbackCopy(value);
-}
-
-function fallbackCopy(value: string): boolean {
-    const textArea = document.createElement("textarea");
-    textArea.value = value;
-    textArea.readOnly = true;
-    textArea.className = "copy-buffer";
-    document.body.append(textArea);
-    textArea.select();
-    const succeeded = document.execCommand("copy");
-    textArea.remove();
-    return succeeded;
 }

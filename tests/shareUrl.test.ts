@@ -1,20 +1,13 @@
 import { describe, expect, test } from "vitest";
-import { defaultCosts } from "../src/data/defaultCosts";
-import { createShareUrl, parseSharedInput } from "../src/utils/shareUrl";
+import { parseSharedInput } from "../src/utils/shareUrl";
 
 describe("shareUrl", () => {
-    test("入力条件をURLSearchParamsへ保存して検証済みで復元する", () => {
-        const source = new URL("https://example.test/app/");
-        const url = createShareUrl(source, {
-            fanBalance: 11_800_000,
-            gemBalance: 5_980,
-            targetPulls: 15,
-            mode: "converted-cost",
-            gemFanValue: 2_500,
-            costs: defaultCosts,
-        });
+    test("URLSearchParamsの入力条件を検証済みで復元する", () => {
+        const url = new URL(
+            "https://example.test/app/?fans=11800000&gems=5980&pulls=15&mode=converted-cost&gemFanValue=2500",
+        );
 
-        const parsed = parseSharedInput(new URL(url));
+        const parsed = parseSharedInput(url);
 
         expect(parsed).toEqual({
             ok: true,

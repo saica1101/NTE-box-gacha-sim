@@ -1,4 +1,4 @@
-import type { OptimizationMode, OptimizerInput } from "../domain/types";
+import type { OptimizationMode } from "../domain/types";
 import { isOptimizationMode, parseIntegerInput } from "../domain/validation";
 
 export interface SharedInput {
@@ -17,16 +17,6 @@ export type SharedInputResult =
     | {
           ok: false;
       };
-
-export function createShareUrl(source: URL, input: OptimizerInput): string {
-    const url = new URL(source.href);
-    url.searchParams.set("fans", String(input.fanBalance));
-    url.searchParams.set("gems", String(input.gemBalance));
-    url.searchParams.set("pulls", String(input.targetPulls));
-    url.searchParams.set("mode", input.mode);
-    url.searchParams.set("gemFanValue", String(input.gemFanValue));
-    return url.toString();
-}
 
 export function parseSharedInput(url: URL): SharedInputResult {
     const fanBalance = parseParam(url.searchParams, "fans", "所持ファンス");
