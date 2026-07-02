@@ -1,0 +1,4 @@
+.playwright-mcp/
+.playwright-cli/
+node_modules/
+dist/
