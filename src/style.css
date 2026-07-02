@@ -14,7 +14,7 @@
     --mode-selected-ink: #fffaf0;
     --table-head-bg: #101820;
     --table-head-ink: #fffaf0;
-    --result-table-font-size: 0.82rem;
+    --result-table-font-size: 0.9rem;
     --warning: #7a2b20;
     --focus: #0f6b78;
     --shadow: 0 18px 45px rgb(16 24 32 / 12%);
@@ -517,7 +517,7 @@ thead th {
 
 .result-table th,
 .result-table td {
-    padding: 8px 6px;
+    padding: 10px 10px;
     overflow-wrap: anywhere;
 }
 
@@ -531,32 +531,32 @@ thead th {
 
 .top-candidates-table th:nth-child(1),
 .top-candidates-table td:nth-child(1) {
-    width: 6%;
+    width: 7%;
 }
 
 .top-candidates-table th:nth-child(2),
 .top-candidates-table td:nth-child(2) {
-    width: 17%;
+    width: 18%;
 }
 
 .top-candidates-table th:nth-child(3),
 .top-candidates-table td:nth-child(3) {
-    width: 12%;
+    width: 14%;
 }
 
 .top-candidates-table th:nth-child(4),
 .top-candidates-table td:nth-child(4) {
-    width: 16%;
+    width: 18%;
 }
 
 .top-candidates-table th:nth-child(5),
 .top-candidates-table td:nth-child(5) {
-    width: 11%;
+    width: 13%;
 }
 
 .top-candidates-table th:nth-child(6),
 .top-candidates-table td:nth-child(6) {
-    width: 38%;
+    width: 30%;
 }
 
 .status-message {

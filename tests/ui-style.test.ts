@@ -57,6 +57,15 @@ describe("UI color contrast hooks", () => {
         expect(renderTs).not.toContain('label: "円石消費率"');
     });
 
+    test("6列化した上位5件テーブルの密度を読みやすく整える", () => {
+        expect(css).toContain("--result-table-font-size: 0.9rem");
+        expect(css).toContain("padding: 10px 10px");
+        expect(css).toMatch(
+            /\.top-candidates-table th:nth-child\(6\),\s*\.top-candidates-table td:nth-child\(6\)\s*{\s*width:\s*30%/s,
+        );
+        expect(css).not.toContain("width: 38%");
+    });
+
     test("output内の表はカード幅に収まり、狭い幅では行内ラベルを表示する", () => {
         expect(html).toContain('class="table-wrap result-table-wrap"');
         expect(html).toContain(
