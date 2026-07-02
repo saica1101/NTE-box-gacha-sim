@@ -10,8 +10,13 @@ import type { FormErrors } from "./form";
 
 interface OutcomeMetric {
     label: string;
-    value: string;
+    value?: string;
     isPrimary?: boolean;
+    variant?: "balance";
+    details?: {
+        label: string;
+        value: string;
+    }[];
 }
 
 interface ResultCell {
@@ -86,7 +91,7 @@ export function renderResult(
     }
 
     renderFallbackMessage(elements, result);
-    renderMetrics(elements, result);
+    renderMetrics(elements, input, result);
     renderRoundBreakdown(elements, result);
     renderTopCandidates(elements, result);
     renderPaymentDetails(elements, input, result.best, result.actualPulls);
@@ -124,6 +129,7 @@ function renderFallbackMessage(
 
 function renderMetrics(
     elements: AppElements,
+    input: OptimizerInput,
     result: OptimizationResult,
 ): void {
     const best = result.best;
@@ -141,26 +147,65 @@ function renderMetrics(
         },
         { label: "ファンス消費", value: formatNumber(best.fanSpend) },
         { label: "円石消費", value: formatNumber(best.gemSpend) },
+        {
+            label: "消費後残量",
+            variant: "balance",
+            details: [
+                {
+                    label: "ファンス",
+                    value: `${formatNumber(input.fanBalance)} → ${formatNumber(best.fanRemain)}`,
+                },
+                {
+                    label: "円石",
+                    value: `${formatNumber(input.gemBalance)} → ${formatNumber(best.gemRemain)}`,
+                },
+            ],
+        },
         { label: "残ファンス", value: formatNumber(best.fanRemain) },
         { label: "残円石", value: formatNumber(best.gemRemain) },
     ] satisfies OutcomeMetric[];
-    const nodes = metrics.map(({ label, value, isPrimary }) => {
-        const item = document.createElement("div");
-        const term = document.createElement("dt");
-        const description = document.createElement("dd");
+    const nodes = metrics.map(
+        ({ label, value, isPrimary, variant, details }) => {
+            const item = document.createElement("div");
+            const term = document.createElement("dt");
+            const description = document.createElement("dd");
 
-        item.className = "outcome-summary-item";
+            item.className = "outcome-summary-item";
 
-        if (isPrimary === true) {
-            item.classList.add("is-primary");
-        }
+            if (isPrimary === true) {
+                item.classList.add("is-primary");
+            }
 
-        term.textContent = label;
-        description.textContent = value;
-        item.append(term, description);
+            if (variant !== undefined) {
+                item.classList.add(`is-${variant}`);
+            }
 
-        return item;
-    });
+            term.textContent = label;
+
+            if (details !== undefined) {
+                description.className = "balance-details";
+                details.forEach((detail) => {
+                    const row = document.createElement("span");
+                    const detailLabel = document.createElement("span");
+                    const detailValue = document.createElement("span");
+
+                    row.className = "balance-detail-row";
+                    detailLabel.className = "balance-detail-label";
+                    detailValue.className = "balance-detail-value";
+                    detailLabel.textContent = detail.label;
+                    detailValue.textContent = detail.value;
+                    row.append(detailLabel, detailValue);
+                    description.append(row);
+                });
+            } else {
+                description.textContent = value ?? "";
+            }
+
+            item.append(term, description);
+
+            return item;
+        },
+    );
 
     elements.resultMetrics.replaceChildren(...nodes);
 }

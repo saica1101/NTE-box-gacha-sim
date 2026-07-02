@@ -76,6 +76,7 @@ describe("UI color contrast hooks", () => {
         expect(renderTs).toContain('label: "判定"');
         expect(renderTs).toContain('label: "ファンス消費"');
         expect(renderTs).toContain('label: "円石消費"');
+        expect(renderTs).toContain('label: "消費後残量"');
         expect(renderTs).toContain('label: "残ファンス"');
         expect(renderTs).toContain('label: "残円石"');
         expect(renderTs).not.toContain('label: "指定回数"');
@@ -85,6 +86,67 @@ describe("UI color contrast hooks", () => {
         expect(renderTs).not.toContain('label: "円石消費率"');
         expect(renderTs).toContain("試算が完了しました。");
         expect(renderTs).not.toContain("試算完了：${totalElapsedMs");
+    });
+
+    test("判定は文字装飾で軽く強調し、要約カードの左線は直線で描く", () => {
+        expect(css).toContain(".outcome-summary-item::before");
+        expect(css).toContain(".outcome-summary-item.is-primary::before");
+        expect(css).toContain("border-radius: 0");
+        expect(css).toContain("left: 8px");
+        expect(css).toContain("top: 10px");
+        expect(css).toContain("bottom: 10px");
+        expect(css).toMatch(
+            /\.outcome-summary-item::before\s*{[^}]*background:\s*var\(--signal\)/s,
+        );
+        expect(css).toContain("text-decoration-thickness: 2px");
+        expect(css).not.toContain("grid-row: span 2");
+        expect(css).not.toContain("font-size: 1.3rem");
+        expect(css).not.toContain("background: var(--ink)");
+        expect(css).not.toContain("border-left: 4px solid var(--steel)");
+    });
+
+    test("上位5件テーブルの円石払い回ヘッダーを中央揃えにする", () => {
+        expect(css).toMatch(
+            /\.top-candidates-table th:nth-child\(6\)\s*{[^}]*text-align:\s*center/s,
+        );
+    });
+
+    test("output要約はファンス列と円石列で消費と残量の縦軸を揃える", () => {
+        expect(css).toMatch(
+            /\.outcome-summary-item:nth-child\(2\)\s*{[^}]*grid-column:\s*2/s,
+        );
+        expect(css).toMatch(
+            /\.outcome-summary-item:nth-child\(3\)\s*{[^}]*grid-column:\s*3/s,
+        );
+        expect(css).toMatch(
+            /\.outcome-summary-item:nth-child\(4\)\s*{[^}]*grid-column:\s*1/s,
+        );
+        expect(css).toMatch(
+            /\.outcome-summary-item:nth-child\(5\)\s*{[^}]*grid-column:\s*2/s,
+        );
+        expect(css).toMatch(
+            /\.outcome-summary-item:nth-child\(6\)\s*{[^}]*grid-column:\s*3/s,
+        );
+    });
+
+    test("output要約の数値は右端で桁を揃え、判定下に残量サマリーを置く", () => {
+        expect(renderTs).toContain('variant: "balance"');
+        expect(renderTs).toContain("balance-details");
+        expect(css).toContain(".outcome-summary-item.is-balance");
+        expect(css).toMatch(
+            /\.outcome-summary-item:not\(\.is-primary\):not\(\.is-balance\) dd\s*{[^}]*justify-self:\s*end[^}]*text-align:\s*right/s,
+        );
+        expect(css).toMatch(
+            /\.balance-detail-value\s*{[^}]*text-align:\s*right/s,
+        );
+    });
+
+    test("モバイル幅ではoutput要約の明示配置を解除して1カラムに戻す", () => {
+        const mobileCss = css.slice(css.indexOf("@media (max-width: 560px)"));
+
+        expect(mobileCss).toMatch(
+            /\.outcome-summary-item:nth-child\(n\)\s*{[^}]*grid-column:\s*auto[^}]*grid-row:\s*auto/s,
+        );
     });
 
     test("output内の表はカード幅に収まり、狭い幅では行内ラベルを表示する", () => {
