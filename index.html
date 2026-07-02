@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Neverness To Everness のガチャ支払いを、ファンスと円石の所持量から試算するWebアプリ"
+        />
+        <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
+        <title>NTE Draco Box 支払い試算</title>
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="header-grid">
+                <div>
+                    <p class="eyebrow">Neverness To Everness</p>
+                    <h1>Draco Box 支払い試算盤</h1>
+                    <p class="lead">
+                        ファンスと円石の残量を見ながら、15回分の支払い配分を
+                        ボタン操作で決定します。
+                    </p>
+                </div>
+                <div class="header-meter" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-shell">
+            <form id="sim-form" class="tool-panel" novalidate>
+                <section class="input-section" aria-labelledby="input-heading">
+                    <div class="section-heading">
+                        <p class="eyebrow">Input</p>
+                        <h2 id="input-heading">試算条件</h2>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="fan-balance">所持ファンス</label>
+                            <input
+                                id="fan-balance"
+                                name="fanBalance"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                aria-describedby="fan-balance-help fan-balance-error"
+                            />
+                            <p id="fan-balance-help" class="field-help">
+                                カンマと全角数字を使用できます。
+                            </p>
+                            <p
+                                id="fan-balance-error"
+                                class="field-error"
+                                aria-live="polite"
+                            ></p>
+                        </div>
+
+                        <div class="field">
+                            <label for="gem-balance">所持円石</label>
+                            <input
+                                id="gem-balance"
+                                name="gemBalance"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                aria-describedby="gem-balance-help gem-balance-error"
+                            />
+                            <p id="gem-balance-help" class="field-help">
+                                0以上の整数で入力してください。
+                            </p>
+                            <p
+                                id="gem-balance-error"
+                                class="field-error"
+                                aria-live="polite"
+                            ></p>
+                        </div>
+
+                        <div class="field">
+                            <label for="target-pulls">引きたい回数</label>
+                            <select
+                                id="target-pulls"
+                                name="targetPulls"
+                            ></select>
+                        </div>
+
+                        <div class="field" id="gem-fan-value-field">
+                            <label for="gem-fan-value"
+                                >円石1個のファンス換算</label
+                            >
+                            <input
+                                id="gem-fan-value"
+                                name="gemFanValue"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                aria-describedby="gem-fan-value-help gem-fan-value-error"
+                            />
+                            <p id="gem-fan-value-help" class="field-help">
+                                総合コスト（換算）モードで使用します。
+                            </p>
+                            <p
+                                id="gem-fan-value-error"
+                                class="field-error"
+                                aria-live="polite"
+                            ></p>
+                        </div>
+                    </div>
+
+                    <fieldset class="mode-fieldset">
+                        <legend>最適化モード</legend>
+                        <div class="mode-segments">
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="mode"
+                                    value="balance"
+                                />
+                                <span>バランス</span>
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="mode"
+                                    value="save-gems"
+                                />
+                                <span>円石温存</span>
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="mode"
+                                    value="save-fans"
+                                />
+                                <span>ファンス温存</span>
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="mode"
+                                    value="converted-cost"
+                                />
+                                <span>総合コスト</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <p id="form-error-summary" class="error-summary"></p>
+
+                    <div class="actions">
+                        <button
+                            id="submit-button"
+                            type="submit"
+                            class="primary"
+                        >
+                            試算する
+                        </button>
+                        <button
+                            id="share-button"
+                            type="button"
+                            class="secondary"
+                        >
+                            条件を共有
+                        </button>
+                    </div>
+                    <p
+                        id="share-status"
+                        class="field-help"
+                        aria-live="polite"
+                    ></p>
+                </section>
+
+                <details class="settings-panel">
+                    <summary>詳細設定：回ごとの必要コスト</summary>
+                    <div class="table-wrap">
+                        <table>
+                            <caption>
+                                15回分の必要ファンスと必要円石
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">回数</th>
+                                    <th scope="col">必要ファンス</th>
+                                    <th scope="col">必要円石</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cost-table-body"></tbody>
+                        </table>
+                    </div>
+                    <button
+                        id="reset-costs-button"
+                        type="button"
+                        class="secondary"
+                    >
+                        初期値へ戻す
+                    </button>
+                    <p
+                        id="cost-error"
+                        class="field-error"
+                        aria-live="polite"
+                    ></p>
+                </details>
+            </form>
+
+            <section
+                id="result-region"
+                class="result-panel"
+                aria-labelledby="result-heading"
+                aria-live="polite"
+                aria-busy="false"
+            >
+                <div class="section-heading">
+                    <p class="eyebrow">Output</p>
+                    <h2 id="result-heading" tabindex="-1">試算状態</h2>
+                </div>
+                <p id="status-message" class="status-message"></p>
+
+                <div id="result-content" class="result-content" hidden>
+                    <p id="fallback-message" class="fallback-message"></p>
+                    <dl id="result-metrics" class="metrics-grid"></dl>
+
+                    <section aria-labelledby="rounds-heading">
+                        <h3 id="rounds-heading">支払い回の内訳</h3>
+                        <div class="round-pairs">
+                            <p>
+                                <strong>円石払い</strong>
+                                <span id="gem-rounds">なし</span>
+                            </p>
+                            <p>
+                                <strong>ファンス払い</strong>
+                                <span id="fan-rounds">なし</span>
+                            </p>
+                        </div>
+                    </section>
+
+                    <section aria-labelledby="top-heading">
+                        <h3 id="top-heading">最も得な結果 上位5件</h3>
+                        <div class="table-wrap">
+                            <table>
+                                <caption>
+                                    選択した最適化モードで順位付けした候補
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">順位</th>
+                                        <th scope="col">ファンス消費</th>
+                                        <th scope="col">円石消費</th>
+                                        <th scope="col">残ファンス</th>
+                                        <th scope="col">残円石</th>
+                                        <th scope="col">ファンス消費率</th>
+                                        <th scope="col">円石消費率</th>
+                                        <th scope="col">円石払い回</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-candidates-body"></tbody>
+                            </table>
+                        </div>
+                        <p id="top-candidates-empty" class="empty-state"></p>
+                    </section>
+
+                    <section aria-labelledby="detail-heading">
+                        <h3 id="detail-heading">1位候補の各回支払い</h3>
+                        <div class="table-wrap">
+                            <table>
+                                <caption>
+                                    各回の支払い方法と必要コスト
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">回数</th>
+                                        <th scope="col">支払い方法</th>
+                                        <th scope="col">必要ファンス</th>
+                                        <th scope="col">必要円石</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payment-detail-body"></tbody>
+                            </table>
+                        </div>
+                        <p id="payment-detail-empty" class="empty-state"></p>
+                    </section>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>
+                入力内容はブラウザ内で処理され、外部APIやバックエンドへ送信されません。
+            </p>
+        </footer>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
