@@ -50,6 +50,13 @@ describe("UI color contrast hooks", () => {
         expect(css).toContain("white-space: nowrap");
     });
 
+    test("上位5件テーブルに消費率列を表示しない", () => {
+        expect(html).not.toContain('<th scope="col">ファンス消費率</th>');
+        expect(html).not.toContain('<th scope="col">円石消費率</th>');
+        expect(renderTs).not.toContain('label: "ファンス消費率"');
+        expect(renderTs).not.toContain('label: "円石消費率"');
+    });
+
     test("output内の表はカード幅に収まり、狭い幅では行内ラベルを表示する", () => {
         expect(html).toContain('class="table-wrap result-table-wrap"');
         expect(html).toContain(

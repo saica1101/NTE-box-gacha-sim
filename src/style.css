@@ -522,7 +522,7 @@ thead th {
 }
 
 .result-table .number-cell,
-.top-candidates-table th:nth-child(-n + 7),
+.top-candidates-table th:nth-child(-n + 5),
 .payment-detail-table th:nth-child(3),
 .payment-detail-table th:nth-child(4) {
     text-align: right;
@@ -536,37 +536,27 @@ thead th {
 
 .top-candidates-table th:nth-child(2),
 .top-candidates-table td:nth-child(2) {
-    width: 15%;
+    width: 17%;
 }
 
 .top-candidates-table th:nth-child(3),
 .top-candidates-table td:nth-child(3) {
-    width: 10%;
+    width: 12%;
 }
 
 .top-candidates-table th:nth-child(4),
 .top-candidates-table td:nth-child(4) {
-    width: 13%;
+    width: 16%;
 }
 
 .top-candidates-table th:nth-child(5),
 .top-candidates-table td:nth-child(5) {
-    width: 8%;
+    width: 11%;
 }
 
 .top-candidates-table th:nth-child(6),
 .top-candidates-table td:nth-child(6) {
-    width: 14%;
-}
-
-.top-candidates-table th:nth-child(7),
-.top-candidates-table td:nth-child(7) {
-    width: 12%;
-}
-
-.top-candidates-table th:nth-child(8),
-.top-candidates-table td:nth-child(8) {
-    width: 22%;
+    width: 38%;
 }
 
 .status-message {

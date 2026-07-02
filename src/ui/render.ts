@@ -197,16 +197,6 @@ function renderTopCandidates(
                 variant: "number",
             },
             {
-                label: "ファンス消費率",
-                value: formatPercent(candidate.fanRate),
-                variant: "number",
-            },
-            {
-                label: "円石消費率",
-                value: formatPercent(candidate.gemRate),
-                variant: "number",
-            },
-            {
                 label: "円石払い回",
                 value: formatRounds(candidate, "gems", result.actualPulls),
             },
