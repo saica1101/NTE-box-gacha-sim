@@ -8,6 +8,12 @@ import { formatNumber, formatPercent } from "../utils/numbers";
 import type { AppElements } from "./elements";
 import type { FormErrors } from "./form";
 
+interface ResultCell {
+    label: string;
+    value: string;
+    variant?: "number";
+}
+
 export function renderFormErrors(
     elements: AppElements,
     errors: FormErrors,
@@ -168,17 +174,38 @@ function renderTopCandidates(
 ): void {
     const rows = result.recommendations.map((candidate, index) => {
         const row = document.createElement("tr");
-        const cells = [
-            { label: "順位", value: `${index + 1}` },
-            { label: "消費ファンス", value: formatNumber(candidate.fanSpend) },
-            { label: "消費円石", value: formatNumber(candidate.gemSpend) },
-            { label: "残ファンス", value: formatNumber(candidate.fanRemain) },
-            { label: "残円石", value: formatNumber(candidate.gemRemain) },
+        const cells: ResultCell[] = [
+            { label: "順位", value: `${index + 1}`, variant: "number" },
+            {
+                label: "消費ファンス",
+                value: formatNumber(candidate.fanSpend),
+                variant: "number",
+            },
+            {
+                label: "消費円石",
+                value: formatNumber(candidate.gemSpend),
+                variant: "number",
+            },
+            {
+                label: "残ファンス",
+                value: formatNumber(candidate.fanRemain),
+                variant: "number",
+            },
+            {
+                label: "残円石",
+                value: formatNumber(candidate.gemRemain),
+                variant: "number",
+            },
             {
                 label: "ファンス消費率",
                 value: formatPercent(candidate.fanRate),
+                variant: "number",
             },
-            { label: "円石消費率", value: formatPercent(candidate.gemRate) },
+            {
+                label: "円石消費率",
+                value: formatPercent(candidate.gemRate),
+                variant: "number",
+            },
             {
                 label: "円石払い回",
                 value: formatRounds(candidate, "gems", result.actualPulls),
@@ -214,7 +241,7 @@ function renderPaymentDetails(
         const cost = input.costs.at(index);
         const isGemPayment = (candidate.mask & (1 << index)) !== 0;
         const row = document.createElement("tr");
-        const cells = [
+        const cells: ResultCell[] = [
             { label: "回数", value: `${round}回目` },
             {
                 label: "支払い方法",
@@ -223,10 +250,12 @@ function renderPaymentDetails(
             {
                 label: "必要ファンス",
                 value: isGemPayment ? "—" : formatNumber(cost?.fans ?? 0),
+                variant: "number",
             },
             {
                 label: "必要円石",
                 value: isGemPayment ? formatNumber(cost?.gems ?? 0) : "—",
+                variant: "number",
             },
         ];
 
@@ -257,11 +286,14 @@ function setText(element: HTMLElement, value: string): void {
 
 function appendLabeledCells(
     row: HTMLTableRowElement,
-    cells: { label: string; value: string }[],
+    cells: ResultCell[],
 ): void {
-    cells.forEach(({ label, value }) => {
+    cells.forEach(({ label, value, variant }) => {
         const cell = document.createElement("td");
         cell.dataset.label = label;
+        if (variant === "number") {
+            cell.classList.add("number-cell");
+        }
         cell.textContent = value;
         row.append(cell);
     });

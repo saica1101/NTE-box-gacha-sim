@@ -70,15 +70,21 @@ export function populateCostRows(
     costs: RoundCost[] = defaultCosts,
 ): void {
     const rows = costs.map((cost) => {
-        const row = document.createElement("tr");
-        const roundCell = document.createElement("th");
-        const fanCell = document.createElement("td");
-        const gemCell = document.createElement("td");
+        const row = document.createElement("fieldset");
+        const legend = document.createElement("legend");
+        const fanField = document.createElement("label");
+        const gemField = document.createElement("label");
+        const fanLabel = document.createElement("span");
+        const gemLabel = document.createElement("span");
         const fanInput = document.createElement("input");
         const gemInput = document.createElement("input");
 
-        roundCell.scope = "row";
-        roundCell.textContent = `${cost.round}回目`;
+        row.className = "cost-row";
+        legend.textContent = `${cost.round}回目`;
+        fanField.className = "cost-field";
+        gemField.className = "cost-field";
+        fanLabel.textContent = "必要ファンス";
+        gemLabel.textContent = "必要円石";
 
         fanInput.type = "text";
         fanInput.inputMode = "numeric";
@@ -96,13 +102,13 @@ export function populateCostRows(
         gemInput.dataset.costInput = "true";
         gemInput.setAttribute("aria-label", `${cost.round}回目の必要円石`);
 
-        fanCell.append(fanInput);
-        gemCell.append(gemInput);
-        row.append(roundCell, fanCell, gemCell);
+        fanField.append(fanLabel, fanInput);
+        gemField.append(gemLabel, gemInput);
+        row.append(legend, fanField, gemField);
         return row;
     });
 
-    elements.costTableBody.replaceChildren(...rows);
+    elements.costList.replaceChildren(...rows);
 }
 
 export function readOptimizerInput(elements: AppElements): FormReadResult {
@@ -240,12 +246,12 @@ function readSelectedMode(elements: AppElements): OptimizationMode | null {
 
 function readCosts(elements: AppElements): ValidationResult<RoundCost[]> {
     const fanInputs = Array.from(
-        elements.costTableBody.querySelectorAll<HTMLInputElement>(
+        elements.costList.querySelectorAll<HTMLInputElement>(
             "input[data-cost-fans]",
         ),
     );
     const gemInputs = Array.from(
-        elements.costTableBody.querySelectorAll<HTMLInputElement>(
+        elements.costList.querySelectorAll<HTMLInputElement>(
             "input[data-cost-gems]",
         ),
     );

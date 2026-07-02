@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 
 const css = readFileSync("src/style.css", "utf8");
 const html = readFileSync("index.html", "utf8");
+const formTs = readFileSync("src/ui/form.ts", "utf8");
 const renderTs = readFileSync("src/ui/render.ts", "utf8");
 
 describe("UI color contrast hooks", () => {
@@ -42,5 +43,30 @@ describe("UI color contrast hooks", () => {
         expect(css).toContain("@container");
         expect(css).toContain("content: attr(data-label)");
         expect(renderTs).toContain("cell.dataset.label = label");
+    });
+
+    test("output内の数値セルは右揃えで、結果表の文字サイズを統一する", () => {
+        expect(css).toContain("--result-table-font-size");
+        expect(css).toContain("font-size: var(--result-table-font-size)");
+        expect(css).toContain(".result-table .number-cell");
+        expect(css).toContain("font-variant-numeric: tabular-nums");
+        expect(css).toContain("text-align: right");
+        expect(renderTs).toContain('variant: "number"');
+        expect(renderTs).toContain('cell.classList.add("number-cell")');
+        expect(css).not.toContain(".payment-detail-table {\n    font-size");
+    });
+
+    test("詳細設定はモーダル内の1カラム編集リストで表示する", () => {
+        expect(html).toContain('id="open-costs-button"');
+        expect(html).toContain("<dialog");
+        expect(html).toContain('id="cost-settings-dialog"');
+        expect(html).toContain('id="cost-list"');
+        expect(html).not.toContain("<details");
+        expect(html).not.toContain('id="cost-table-body"');
+        expect(css).toContain(".settings-dialog");
+        expect(css).toContain(".cost-list");
+        expect(css).toContain("overflow-y: auto");
+        expect(css).toContain("grid-template-columns: 1fr");
+        expect(formTs).toContain('row.className = "cost-row"');
     });
 });

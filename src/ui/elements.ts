@@ -9,8 +9,11 @@ export interface AppElements {
     gemFanValueError: HTMLElement;
     gemFanValueField: HTMLElement;
     formErrorSummary: HTMLElement;
-    costTableBody: HTMLTableSectionElement;
+    costList: HTMLElement;
     costError: HTMLElement;
+    costSettingsDialog: HTMLDialogElement;
+    openCostsButton: HTMLButtonElement;
+    closeCostsButton: HTMLButtonElement;
     resetCostsButton: HTMLButtonElement;
     submitButton: HTMLButtonElement;
     shareButton: HTMLButtonElement;
@@ -41,8 +44,14 @@ export function getAppElements(): AppElements {
         gemFanValueError: getElement("gem-fan-value-error", HTMLElement),
         gemFanValueField: getElement("gem-fan-value-field", HTMLElement),
         formErrorSummary: getElement("form-error-summary", HTMLElement),
-        costTableBody: getElement("cost-table-body", HTMLTableSectionElement),
+        costList: getElement("cost-list", HTMLElement),
         costError: getElement("cost-error", HTMLElement),
+        costSettingsDialog: getElement(
+            "cost-settings-dialog",
+            HTMLDialogElement,
+        ),
+        openCostsButton: getElement("open-costs-button", HTMLButtonElement),
+        closeCostsButton: getElement("close-costs-button", HTMLButtonElement),
         resetCostsButton: getElement("reset-costs-button", HTMLButtonElement),
         submitButton: getElement("submit-button", HTMLButtonElement),
         shareButton: getElement("share-button", HTMLButtonElement),

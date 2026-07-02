@@ -65,9 +65,37 @@ elements.resetCostsButton.addEventListener("click", () => {
     );
 });
 
+elements.openCostsButton.addEventListener("click", () => {
+    if (typeof elements.costSettingsDialog.showModal === "function") {
+        elements.costSettingsDialog.showModal();
+        return;
+    }
+
+    elements.costSettingsDialog.setAttribute("open", "");
+});
+
+elements.closeCostsButton.addEventListener("click", () => {
+    closeCostSettings();
+});
+
+elements.costSettingsDialog.addEventListener("click", (event) => {
+    if (event.target === elements.costSettingsDialog) {
+        closeCostSettings();
+    }
+});
+
 elements.shareButton.addEventListener("click", () => {
     void handleShare();
 });
+
+function closeCostSettings(): void {
+    if (typeof elements.costSettingsDialog.close === "function") {
+        elements.costSettingsDialog.close();
+        return;
+    }
+
+    elements.costSettingsDialog.removeAttribute("open");
+}
 
 function handleInputChange(event: Event | null, forcedMessage?: string): void {
     if (

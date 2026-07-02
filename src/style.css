@@ -14,6 +14,7 @@
     --mode-selected-ink: #fffaf0;
     --table-head-bg: #101820;
     --table-head-ink: #fffaf0;
+    --result-table-font-size: 0.82rem;
     --warning: #7a2b20;
     --focus: #0f6b78;
     --shadow: 0 18px 45px rgb(16 24 32 / 12%);
@@ -54,7 +55,6 @@ input {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-summary:focus-visible,
 #result-heading:focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
@@ -204,8 +204,7 @@ h3 {
 }
 
 label,
-legend,
-summary {
+legend {
     font-weight: 800;
 }
 
@@ -325,11 +324,107 @@ button:disabled {
 }
 
 .settings-panel {
+    display: grid;
+    gap: 14px;
     border-top: 1px solid var(--line);
 }
 
-.settings-panel summary {
-    cursor: pointer;
+.settings-panel-head {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-panel-head h2 {
+    font-size: 1rem;
+}
+
+.settings-dialog {
+    width: min(720px, calc(100vw - 32px));
+    max-width: none;
+    max-height: min(86vh, 840px);
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.settings-dialog::backdrop {
+    background: rgb(16 24 32 / 54%);
+    backdrop-filter: blur(2px);
+}
+
+.settings-dialog-panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    max-height: min(86vh, 840px);
+}
+
+.settings-dialog-header,
+.settings-dialog-actions {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px;
+}
+
+.settings-dialog-header {
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.settings-dialog-header h2 {
+    font-size: 1.12rem;
+}
+
+.settings-dialog-actions {
+    border-top: 1px solid var(--line-soft);
+}
+
+.settings-dialog-actions .field-error {
+    flex: 1;
+}
+
+.cost-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-width: 0;
+    padding: 16px 18px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.cost-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    background: #fffdfa;
+}
+
+.cost-row legend {
+    padding: 0 4px;
+}
+
+.cost-field {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.cost-field input {
+    min-width: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 .table-wrap {
@@ -373,7 +468,7 @@ thead th {
     width: 100%;
     min-width: 0;
     table-layout: fixed;
-    font-size: 0.76rem;
+    font-size: var(--result-table-font-size);
 }
 
 .result-table caption {
@@ -384,6 +479,14 @@ thead th {
 .result-table td {
     padding: 8px 6px;
     overflow-wrap: anywhere;
+}
+
+.result-table .number-cell,
+.top-candidates-table th:nth-child(-n + 7),
+.payment-detail-table th:nth-child(3),
+.payment-detail-table th:nth-child(4) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 .top-candidates-table th:nth-child(1),
@@ -424,10 +527,6 @@ thead th {
 .top-candidates-table th:nth-child(8),
 .top-candidates-table td:nth-child(8) {
     width: 22%;
-}
-
-.payment-detail-table {
-    font-size: 0.86rem;
 }
 
 .status-message {
@@ -530,13 +629,26 @@ thead th {
     .round-pairs p {
         grid-template-columns: 1fr;
     }
+
+    .settings-panel-head,
+    .settings-dialog-header,
+    .settings-dialog-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .settings-panel-head button,
+    .settings-dialog-header button,
+    .settings-dialog-actions button {
+        width: 100%;
+    }
 }
 
 @container (max-width: 640px) {
     .result-table {
         border-collapse: separate;
         border-spacing: 0;
-        font-size: 0.86rem;
+        font-size: var(--result-table-font-size);
     }
 
     .result-table thead {
@@ -567,6 +679,7 @@ thead th {
     .result-table td::before {
         color: var(--ink-soft);
         font-weight: 800;
+        text-align: left;
         content: attr(data-label);
     }
 }
@@ -597,7 +710,8 @@ thead th {
     .mode-segments span,
     .metrics-grid dt,
     .metrics-grid dd,
-    .round-pairs p {
+    .round-pairs p,
+    .cost-row {
         color: var(--ink);
         background: #10181d;
     }

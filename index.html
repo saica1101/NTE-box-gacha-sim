@@ -174,36 +174,71 @@
                     ></p>
                 </section>
 
-                <details class="settings-panel">
-                    <summary>詳細設定：回ごとの必要コスト</summary>
-                    <div class="table-wrap">
-                        <table>
-                            <caption>
-                                15回分の必要ファンスと必要円石
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">回数</th>
-                                    <th scope="col">必要ファンス</th>
-                                    <th scope="col">必要円石</th>
-                                </tr>
-                            </thead>
-                            <tbody id="cost-table-body"></tbody>
-                        </table>
+                <section
+                    class="settings-panel"
+                    aria-labelledby="cost-settings-title"
+                >
+                    <div class="settings-panel-head">
+                        <div>
+                            <p class="eyebrow">Detail</p>
+                            <h2 id="cost-settings-title">
+                                詳細設定：回ごとの必要コスト
+                            </h2>
+                        </div>
+                        <button
+                            id="open-costs-button"
+                            type="button"
+                            class="secondary"
+                        >
+                            設定を開く
+                        </button>
                     </div>
-                    <button
-                        id="reset-costs-button"
-                        type="button"
-                        class="secondary"
+
+                    <dialog
+                        id="cost-settings-dialog"
+                        class="settings-dialog"
+                        aria-labelledby="cost-dialog-heading"
                     >
-                        初期値へ戻す
-                    </button>
-                    <p
-                        id="cost-error"
-                        class="field-error"
-                        aria-live="polite"
-                    ></p>
-                </details>
+                        <div class="settings-dialog-panel">
+                            <div class="settings-dialog-header">
+                                <div>
+                                    <p class="eyebrow">Cost Table</p>
+                                    <h2 id="cost-dialog-heading">
+                                        回ごとの必要コスト
+                                    </h2>
+                                </div>
+                                <button
+                                    id="close-costs-button"
+                                    type="button"
+                                    class="secondary"
+                                >
+                                    閉じる
+                                </button>
+                            </div>
+
+                            <div
+                                id="cost-list"
+                                class="cost-list"
+                                aria-label="15回分の必要ファンスと必要円石"
+                            ></div>
+
+                            <div class="settings-dialog-actions">
+                                <button
+                                    id="reset-costs-button"
+                                    type="button"
+                                    class="secondary"
+                                >
+                                    初期値へ戻す
+                                </button>
+                                <p
+                                    id="cost-error"
+                                    class="field-error"
+                                    aria-live="polite"
+                                ></p>
+                            </div>
+                        </div>
+                    </dialog>
+                </section>
             </form>
 
             <section
