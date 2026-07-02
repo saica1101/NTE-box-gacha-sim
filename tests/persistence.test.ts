@@ -40,6 +40,7 @@ describe("persistence", () => {
         const storage = new MemoryStorage();
         const state: PersistedState = {
             version: 1,
+            boxGachaId: "porsche",
             fanBalance: 1_000,
             gemBalance: 200,
             targetPulls: 7,
@@ -60,5 +61,23 @@ describe("persistence", () => {
         expect(loadPersistedState(storage)).toEqual(
             createDefaultPersistedState(),
         );
+    });
+
+    test("旧形式のlocalStorageは既定ガチャIDを補って復元する", () => {
+        const storage = new MemoryStorage();
+        storage.setItem(
+            "nte-draco-box-sim",
+            JSON.stringify({
+                version: 1,
+                fanBalance: 1_000,
+                gemBalance: 200,
+                targetPulls: 7,
+                mode: "save-gems",
+                gemFanValue: 3_000,
+                costs: defaultCosts,
+            }),
+        );
+
+        expect(loadPersistedState(storage).boxGachaId).toBe("draco");
     });
 });

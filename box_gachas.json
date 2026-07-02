@@ -1,0 +1,167 @@
+{
+    "version": 1,
+    "box_gachas": [
+        {
+            "id": "porsche",
+            "name": "ポルシェ ボックスガチャ",
+            "costs": [
+                {
+                    "count": 1,
+                    "fans": 50000,
+                    "gems": 50
+                },
+                {
+                    "count": 2,
+                    "fans": 80000,
+                    "gems": 80
+                },
+                {
+                    "count": 3,
+                    "fans": 100000,
+                    "gems": 100
+                },
+                {
+                    "count": 4,
+                    "fans": 150000,
+                    "gems": 150
+                },
+                {
+                    "count": 5,
+                    "fans": 200000,
+                    "gems": 200
+                },
+                {
+                    "count": 6,
+                    "fans": 300000,
+                    "gems": 300
+                },
+                {
+                    "count": 7,
+                    "fans": 500000,
+                    "gems": 500
+                },
+                {
+                    "count": 8,
+                    "fans": 800000,
+                    "gems": 600
+                },
+                {
+                    "count": 9,
+                    "fans": 1000000,
+                    "gems": 800
+                },
+                {
+                    "count": 10,
+                    "fans": 1500000,
+                    "gems": 1200
+                },
+                {
+                    "count": 11,
+                    "fans": 2000000,
+                    "gems": 1400
+                },
+                {
+                    "count": 12,
+                    "fans": 2500000,
+                    "gems": 1600
+                },
+                {
+                    "count": 13,
+                    "fans": 3000000,
+                    "gems": 1800
+                },
+                {
+                    "count": 14,
+                    "fans": 3500000,
+                    "gems": 2000
+                },
+                {
+                    "count": 15,
+                    "fans": 4200000,
+                    "gems": 2200
+                }
+            ]
+        },
+        {
+            "id": "draco",
+            "name": "ドラコ ボックスガチャ",
+            "costs": [
+                {
+                    "count": 1,
+                    "fans": 50000,
+                    "gems": 50
+                },
+                {
+                    "count": 2,
+                    "fans": 80000,
+                    "gems": 80
+                },
+                {
+                    "count": 3,
+                    "fans": 100000,
+                    "gems": 100
+                },
+                {
+                    "count": 4,
+                    "fans": 120000,
+                    "gems": 120
+                },
+                {
+                    "count": 5,
+                    "fans": 150000,
+                    "gems": 150
+                },
+                {
+                    "count": 6,
+                    "fans": 300000,
+                    "gems": 200
+                },
+                {
+                    "count": 7,
+                    "fans": 450000,
+                    "gems": 280
+                },
+                {
+                    "count": 8,
+                    "fans": 600000,
+                    "gems": 350
+                },
+                {
+                    "count": 9,
+                    "fans": 750000,
+                    "gems": 400
+                },
+                {
+                    "count": 10,
+                    "fans": 900000,
+                    "gems": 450
+                },
+                {
+                    "count": 11,
+                    "fans": 1100000,
+                    "gems": 500
+                },
+                {
+                    "count": 12,
+                    "fans": 1300000,
+                    "gems": 600
+                },
+                {
+                    "count": 13,
+                    "fans": 1700000,
+                    "gems": 800
+                },
+                {
+                    "count": 14,
+                    "fans": 2000000,
+                    "gems": 900
+                },
+                {
+                    "count": 15,
+                    "fans": 2200000,
+                    "gems": 1000
+                }
+            ]
+        }
+    ]
+}

@@ -203,6 +203,13 @@ h3 {
     gap: 7px;
 }
 
+.gacha-select-field {
+    padding: 12px;
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    background: rgb(47 93 100 / 8%);
+}
+
 label,
 legend {
     font-weight: 800;

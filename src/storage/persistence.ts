@@ -4,6 +4,7 @@ import {
     defaultGemFanValue,
     defaultCosts,
 } from "../data/defaultCosts";
+import { defaultBoxGachaId, getBoxGachaById } from "../data/boxGachas";
 import type { OptimizationMode, RoundCost } from "../domain/types";
 import { isOptimizationMode, validateCosts } from "../domain/validation";
 
@@ -11,6 +12,7 @@ export const storageKey = "nte-draco-box-sim";
 
 export interface PersistedState {
     version: 1;
+    boxGachaId: string;
     fanBalance: number;
     gemBalance: number;
     targetPulls: number;
@@ -22,6 +24,7 @@ export interface PersistedState {
 export function createDefaultPersistedState(): PersistedState {
     return {
         version: 1,
+        boxGachaId: defaultBoxGachaId,
         fanBalance: defaultFanBalance,
         gemBalance: defaultGemBalance,
         targetPulls: 15,
@@ -41,11 +44,13 @@ export function loadPersistedState(storage: Storage): PersistedState {
     try {
         const parsed: unknown = JSON.parse(source);
 
-        if (!isPersistedState(parsed)) {
+        const persistedState = toPersistedState(parsed);
+
+        if (persistedState === null) {
             return createDefaultPersistedState();
         }
 
-        return parsed;
+        return persistedState;
     } catch {
         return createDefaultPersistedState();
     }
@@ -58,23 +63,46 @@ export function savePersistedState(
     storage.setItem(storageKey, JSON.stringify(state));
 }
 
-function isPersistedState(value: unknown): value is PersistedState {
+function toPersistedState(value: unknown): PersistedState | null {
     if (!isRecord(value)) {
-        return false;
+        return null;
     }
 
+    const boxGachaId = value.boxGachaId;
+    const fanBalance = value.fanBalance;
+    const gemBalance = value.gemBalance;
+    const targetPulls = value.targetPulls;
+    const mode = value.mode;
+    const gemFanValue = value.gemFanValue;
     const costs = value.costs;
 
-    return (
+    if (
         value.version === 1 &&
-        isNonNegativeInteger(value.fanBalance) &&
-        isNonNegativeInteger(value.gemBalance) &&
-        isPullCount(value.targetPulls) &&
-        isOptimizationMode(value.mode) &&
-        isNonNegativeInteger(value.gemFanValue) &&
+        isNonNegativeInteger(fanBalance) &&
+        isNonNegativeInteger(gemBalance) &&
+        isPullCount(targetPulls) &&
+        isOptimizationMode(mode) &&
+        isNonNegativeInteger(gemFanValue) &&
         Array.isArray(costs) &&
         isRoundCostArray(costs)
-    );
+    ) {
+        return {
+            version: 1,
+            boxGachaId:
+                typeof boxGachaId === "string" &&
+                getBoxGachaById(boxGachaId) !== undefined
+                    ? boxGachaId
+                    : defaultBoxGachaId,
+            fanBalance,
+            gemBalance,
+            targetPulls,
+            mode,
+            gemFanValue,
+            costs,
+        };
+    }
+
+    return null;
 }
 
 function isRoundCostArray(value: unknown[]): value is RoundCost[] {

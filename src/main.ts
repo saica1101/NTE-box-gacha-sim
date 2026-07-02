@@ -1,8 +1,13 @@
 import "./style.css";
-import { defaultCosts } from "./data/defaultCosts";
+import {
+    boxGachas,
+    defaultBoxGachaId,
+    getBoxGachaById,
+} from "./data/boxGachas";
 import { optimize } from "./domain/optimizer";
 import { getAppElements } from "./ui/elements";
 import {
+    populateBoxGachaOptions,
     populateCostRows,
     populateForm,
     populatePullOptions,
@@ -26,6 +31,7 @@ let persistedState = loadPersistedState(window.localStorage);
 let hasCalculated = false;
 let isCalculating = false;
 
+populateBoxGachaOptions(elements, boxGachas);
 populatePullOptions(elements);
 
 const sharedInput = parseSharedInput(new URL(window.location.href));
@@ -58,10 +64,10 @@ elements.form.addEventListener("submit", (event) => {
 });
 
 elements.resetCostsButton.addEventListener("click", () => {
-    populateCostRows(elements, defaultCosts);
+    applySelectedBoxGachaCosts();
     handleInputChange(
         null,
-        "コスト設定が変更されています。試算ボタンを押してください。",
+        "対象ガチャの初期コストへ戻しました。試算ボタンを押してください。",
     );
 });
 
@@ -94,6 +100,12 @@ function closeCostSettings(): void {
 }
 
 function handleInputChange(event: Event | null, forcedMessage?: string): void {
+    const isBoxGachaChange = event?.target === elements.boxGachaSelect;
+
+    if (isBoxGachaChange) {
+        applySelectedBoxGachaCosts();
+    }
+
     if (
         event?.target instanceof HTMLInputElement &&
         event.target.name === "mode"
@@ -105,7 +117,10 @@ function handleInputChange(event: Event | null, forcedMessage?: string): void {
     renderFormErrors(elements, read.errors);
 
     if (read.input !== null) {
-        savePersistedState(window.localStorage, toPersistedState(read.input));
+        savePersistedState(
+            window.localStorage,
+            toPersistedState(read.input, getSelectedBoxGachaId()),
+        );
     }
 
     const isCostInput =
@@ -113,9 +128,11 @@ function handleInputChange(event: Event | null, forcedMessage?: string): void {
         event.target.dataset.costInput === "true";
     const message =
         forcedMessage ??
-        (isCostInput
-            ? "コスト設定が変更されています。試算ボタンを押してください。"
-            : "条件が変更されています。試算ボタンを押してください。");
+        (isBoxGachaChange
+            ? "対象ガチャを変更しました。試算ボタンを押してください。"
+            : isCostInput
+              ? "コスト設定が変更されています。試算ボタンを押してください。"
+              : "条件が変更されています。試算ボタンを押してください。");
 
     renderNotice(elements, message, { isStale: hasCalculated });
 }
@@ -144,7 +161,10 @@ async function handleSubmit(event: SubmitEvent): Promise<void> {
         const result = optimize(read.input);
         const totalElapsedMs = performance.now() - totalStartedAt;
         hasCalculated = true;
-        savePersistedState(window.localStorage, toPersistedState(read.input));
+        savePersistedState(
+            window.localStorage,
+            toPersistedState(read.input, getSelectedBoxGachaId()),
+        );
         renderResult(elements, read.input, result, totalElapsedMs);
     } catch (error) {
         console.error("試算処理で予期しないエラーが発生しました。", error);
@@ -155,4 +175,23 @@ async function handleSubmit(event: SubmitEvent): Promise<void> {
     } finally {
         isCalculating = false;
     }
+}
+
+function applySelectedBoxGachaCosts(): void {
+    const selected = getBoxGachaById(getSelectedBoxGachaId());
+
+    if (selected !== undefined) {
+        populateCostRows(elements, selected.costs);
+    }
+}
+
+function getSelectedBoxGachaId(): string {
+    const selected = getBoxGachaById(elements.boxGachaSelect.value);
+
+    if (selected !== undefined) {
+        return selected.id;
+    }
+
+    elements.boxGachaSelect.value = defaultBoxGachaId;
+    return defaultBoxGachaId;
 }

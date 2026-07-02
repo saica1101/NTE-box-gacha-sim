@@ -57,6 +57,16 @@ describe("UI color contrast hooks", () => {
         );
     });
 
+    test("対象ボックスガチャをドロップダウンで選択できる", () => {
+        expect(html).toContain(
+            '<label for="box-gacha">対象ボックスガチャ</label>',
+        );
+        expect(html).toContain('id="box-gacha"');
+        expect(html).toContain('name="boxGacha"');
+        expect(elementsTs).toContain("boxGachaSelect");
+        expect(css).toContain(".gacha-select-field");
+    });
+
     test("条件共有ボタンと共有URL作成処理を表示しない", () => {
         expect(html).not.toContain('id="share-button"');
         expect(html).not.toContain('id="share-status"');

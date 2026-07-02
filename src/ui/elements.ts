@@ -1,5 +1,6 @@
 export interface AppElements {
     form: HTMLFormElement;
+    boxGachaSelect: HTMLSelectElement;
     fanBalanceInput: HTMLInputElement;
     fanBalanceError: HTMLElement;
     gemBalanceInput: HTMLInputElement;
@@ -33,6 +34,7 @@ export interface AppElements {
 export function getAppElements(): AppElements {
     return {
         form: getElement("sim-form", HTMLFormElement),
+        boxGachaSelect: getElement("box-gacha", HTMLSelectElement),
         fanBalanceInput: getElement("fan-balance", HTMLInputElement),
         fanBalanceError: getElement("fan-balance-error", HTMLElement),
         gemBalanceInput: getElement("gem-balance", HTMLInputElement),

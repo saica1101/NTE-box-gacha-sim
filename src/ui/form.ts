@@ -1,4 +1,5 @@
 import { defaultCosts, maxPulls } from "../data/defaultCosts";
+import type { BoxGacha } from "../data/boxGachas";
 import type {
     OptimizationMode,
     OptimizerInput,
@@ -36,6 +37,20 @@ const emptyErrors = (): FormErrors => ({
     summary: [],
 });
 
+export function populateBoxGachaOptions(
+    elements: AppElements,
+    gachas: BoxGacha[],
+): void {
+    const options = gachas.map((gacha) => {
+        const option = document.createElement("option");
+        option.value = gacha.id;
+        option.textContent = gacha.name;
+        return option;
+    });
+
+    elements.boxGachaSelect.replaceChildren(...options);
+}
+
 export function populatePullOptions(elements: AppElements): void {
     elements.targetPullsSelect.replaceChildren();
 
@@ -53,6 +68,7 @@ export function populateForm(
 ): void {
     elements.fanBalanceInput.value = toInputNumber(state.fanBalance);
     elements.gemBalanceInput.value = toInputNumber(state.gemBalance);
+    elements.boxGachaSelect.value = state.boxGachaId;
     elements.targetPullsSelect.value = String(state.targetPulls);
     elements.gemFanValueInput.value = toInputNumber(state.gemFanValue);
 
@@ -213,9 +229,13 @@ export function readInputForController(
     };
 }
 
-export function toPersistedState(input: OptimizerInput): PersistedState {
+export function toPersistedState(
+    input: OptimizerInput,
+    boxGachaId: string,
+): PersistedState {
     return {
         version: 1,
+        boxGachaId,
         fanBalance: input.fanBalance,
         gemBalance: input.gemBalance,
         targetPulls: input.targetPulls,
