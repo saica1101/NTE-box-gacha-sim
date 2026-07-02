@@ -18,6 +18,17 @@ describe("UI color contrast hooks", () => {
         expect(packageJson).toContain('"name": "nte-box-gacha-sim"');
     });
 
+    test("ページ左上のタイトルは省略せず1行で表示する", () => {
+        const titleRule = /h1\s*{[^}]*}/s.exec(css)?.[0];
+
+        expect(titleRule).toContain("white-space: nowrap");
+        expect(titleRule).toContain("overflow-wrap: normal");
+        expect(titleRule).toContain("word-break: keep-all");
+        expect(titleRule).not.toContain("text-overflow: ellipsis");
+        expect(css).not.toContain("text-overflow: ellipsis");
+        expect(css).not.toContain("min-width: 320px");
+    });
+
     test("計算後はoutputへ移動し、右下の丸型ボタンからinputへ戻れる", () => {
         expect(html).toContain('id="back-to-top-button"');
         expect(html).toContain('aria-label="入力欄へ戻る"');
